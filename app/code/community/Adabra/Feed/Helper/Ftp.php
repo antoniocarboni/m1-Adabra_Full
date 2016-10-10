@@ -12,6 +12,8 @@ class Adabra_Feed_Helper_Ftp extends Mage_Core_Helper_Abstract
         $helper = Mage::helper('adabra_feed');
         $ftp = new Varien_Io_Ftp();
 
+        $transferMode = (strpos($remoteFileName, '.gz') === false) ? FTP_ASCII : FTP_BINARY;
+
         $ftp->open(array(
             'host' => $helper->getFtpHost(),
             'port' => $helper->getFtpPort(),
@@ -20,10 +22,8 @@ class Adabra_Feed_Helper_Ftp extends Mage_Core_Helper_Abstract
             'ssl' => $helper->getFtpSsl(),
             'passive' => $helper->getFtpPassive(),
             'path' => $helper->getFtpPath(),
-            'file_mode' => FTP_ASCII,
+            'file_mode' => $transferMode,
         ));
-
-        $transferMode = (strpos($remoteFileName, '.gz') === false) ? FTP_ASCII : FTP_BINARY;
 
         $ftp->write($remoteFileName, $localFileName, $transferMode);
         $ftp->close();
