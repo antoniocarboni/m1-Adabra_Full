@@ -25,9 +25,10 @@ class Adabra_Feed_FeedController extends Mage_Core_Controller_Front_Action
             return $this->norouteAction();
         }
 
-        $fileName = $feedInstance->getExportFile(false, true);
-        $this->getResponse()->setHeader('Content-Type', 'application/x-gzip');
+        $compress = $helper->getCompress();
+        $fileName = $feedInstance->getExportFile(false, $compress);
+        $this->getResponse()->setHeader('Content-Type', $compress ? 'application/x-gzip' : 'text/csv');
         $this->getResponse()->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"');
-        $this->getResponse()->setBody($feedInstance->getFeedContent());
+        $this->getResponse()->setBody($feedInstance->getFeedContent($compress));
     }
 }

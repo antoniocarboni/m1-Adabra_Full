@@ -411,13 +411,14 @@ abstract class Adabra_Feed_Model_Feed_Abstract
 
     /**
      * Get feed content
+     * @param $compress
      * @return string
      */
-    public function getFeedContent()
+    public function getFeedContent($compress = false)
     {
         $fileIo = new Varien_Io_File();
 
-        $fileName = $this->getExportFile(false, true);
+        $fileName = $this->getExportFile(false, $compress);
 
         $exportPath = $this->getExportPath();
         $fileIo->open(array('path' => $exportPath));

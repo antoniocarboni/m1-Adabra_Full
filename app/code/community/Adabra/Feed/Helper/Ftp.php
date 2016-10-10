@@ -23,7 +23,9 @@ class Adabra_Feed_Helper_Ftp extends Mage_Core_Helper_Abstract
             'file_mode' => FTP_ASCII,
         ));
 
-        $ftp->write($remoteFileName, $localFileName, FTP_ASCII);
+        $transferMode = (strpos($remoteFileName, '.gz') === false) ? FTP_ASCII : FTP_BINARY;
+
+        $ftp->write($remoteFileName, $localFileName, $transferMode);
         $ftp->close();
     }
 }
