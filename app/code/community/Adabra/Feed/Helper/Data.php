@@ -178,7 +178,7 @@ class Adabra_Feed_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function isFtpEnabled()
     {
-        if (!Mage::helper(self::XML_PATH_FTP_ENABLED)) {
+        if (!Mage::getStoreConfig(self::XML_PATH_FTP_ENABLED)) {
             return false;
         }
 
