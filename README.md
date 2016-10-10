@@ -49,7 +49,7 @@ You can switch and configure such settings by opening "System > Config > Adabra 
  
 You can check feed status every time you need from you backend by clicking "Adabra > Feed" menù entry.
   
-<img src="https://raw.githubusercontent.com/magespecialist/m1-Adabra_Full/master/screenshots/screen_5.png" width="480" />
+<img src="https://raw.githubusercontent.com/magespecialist/m1-Adabra_Full/master/screenshots/screen_5.png" width="800" />
 
 If you need you can force a feed rebuild by clicking "Rebuild feeds" button. Rebuild procedure may take several minutes and it is handled asynchronously.
 
