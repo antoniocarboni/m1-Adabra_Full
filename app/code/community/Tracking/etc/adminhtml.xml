@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <adabra_tracking translate="title" module="adabra_tracking">
+                                        <title>Adabra Tracking</title>
+                                        <sort_order>50</sort_order>
+                                    </adabra_tracking>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

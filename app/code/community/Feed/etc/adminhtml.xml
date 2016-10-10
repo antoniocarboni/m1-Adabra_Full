@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <adabra>
+                        <children>
+                            <feed translate="title" module="adabra_feed">
+                                <title>Feed</title>
+                            </feed>
+                            <vfield translate="title" module="adabra_feed">
+                                <title>Virtual Fields</title>
+                            </vfield>
+                        </children>
+                    </adabra>
+
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <adabra_feed translate="title" module="adabra_feed">
+                                        <title>Adabra Feed</title>
+                                        <sort_order>50</sort_order>
+                                    </adabra_feed>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+
+    <menu>
+        <adabra>
+            <children>
+                <feed translate="title" module="adabra_feed">
+                    <title>Feed</title>
+                    <sort_order>10</sort_order>
+                    <action>adminhtml/adabra_feed</action>
+                </feed>
+                <vfield translate="title" module="adabra_feed">
+                    <title>Virtual Fields</title>
+                    <sort_order>20</sort_order>
+                    <action>adminhtml/adabra_vfield</action>
+                </vfield>
+            </children>
+        </adabra>
+    </menu>
+</config>

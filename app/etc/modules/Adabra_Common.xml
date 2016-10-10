@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Adabra_Common>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Adabra_Common>
+    </modules>
+</config>

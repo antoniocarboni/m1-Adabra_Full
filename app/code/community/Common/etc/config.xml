@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Adabra_Common>
+            <version>0.1.1</version>
+        </Adabra_Common>
+    </modules>
+    <global>
+        <helpers>
+            <adabra_common>
+                <class>Adabra_Common_Helper</class>
+            </adabra_common>
+        </helpers>
+        <models>
+            <adabra_common>
+                <class>Adabra_Common_Model</class>
+            </adabra_common>
+        </models>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <adabra_common>
+                    <file>adabra_common.xml</file>
+                </adabra_common>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>

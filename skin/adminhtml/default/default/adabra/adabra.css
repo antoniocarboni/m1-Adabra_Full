@@ -1,0 +1,7 @@
+ul.tabs li.adabra-tab dt,
+ul.tabs li.adabra-tab dt:hover
+{
+    background-image: url(logo_small.png);
+    background-position: 170px center;
+    background-repeat: no-repeat;
+}

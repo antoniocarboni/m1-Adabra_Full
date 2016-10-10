@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <adabra translate="title" module="adabra_common">
+                        <title>Adabra</title>
+                    </adabra>
+
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <adabra_common translate="title" module="adabra_common">
+                                        <title>Adabra Common</title>
+                                        <sort_order>50</sort_order>
+                                    </adabra_common>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+
+    <menu>
+        <adabra translate="title" module="adabra_common">
+            <title>Adabra</title>
+            <sort_order>900</sort_order>
+        </adabra>
+    </menu>
+</config>

@@ -1,0 +1,26 @@
+<?php
+/** @var $this Adabra_Tracking_Block_Base */
+$properties = $this->getTrackingProperties();
+$coreHelper = Mage::helper('core');
+?>
+<?php if ($this->canShow()) : ?>
+    <!-- ADABRA TRACKING SCRIPT START -->
+    <script type="text/javascript">
+        var _sbnaq = _sbnaq || [];
+        <?php foreach ($properties as $property) : ?>
+        _sbnaq.push(<?php echo $coreHelper->jsonEncode($this->getPayload($property['key'], $property['value'])) ?>);
+        <?php endforeach; ?>
+        _sbnaq.push(['trkPageView']);
+
+        (function() {
+            var u=(("https:" == document.location.protocol) ? "https" : "http") +
+                "://<?php echo $this->getAdabraTrackingHost() ?>/";
+            _sbnaq.push(["setTrackerUrl", u]);
+            var d=document, g=d.createElement("script"),
+                s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+            g.defer=true; g.async=true; g.src=u+"sbn.js";
+            s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+    <!-- ADABRA TRACKING SCRIPT END -->
+<?php endif ?>

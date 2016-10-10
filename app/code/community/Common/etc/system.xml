@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <adabra translate="label" module="adabra_common">
+            <label>Adabra</label>
+            <sort_order>200</sort_order>
+            <class>adabra-tab</class>
+        </adabra>
+    </tabs>
+</config>

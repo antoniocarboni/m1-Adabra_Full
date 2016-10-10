@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config>
+    <api>
+        <resources>
+            <adabra_feed>
+                <model>adabra_feed/api</model>
+                <title>Adabra feed API</title>
+                <acl>adabra_feed</acl>
+                <methods>
+                    <list translate="title" module="adabra_feed">
+                        <title>Retrieve feeds list</title>
+                        <method>getList</method>
+                    </list>
+                    <rebuild>
+                        <title>Rebuild feeds</title>
+                        <method>rebuild</method>
+                    </rebuild>
+                </methods>
+            </adabra_feed>
+        </resources>
+        <v2>
+            <resources_function_prefix>
+                <adabra_feed>adabraFeed</adabra_feed>
+            </resources_function_prefix>
+        </v2>
+        <acl>
+            <resources>
+                <adabra_feed translate="title" module="adabra_feed">
+                    <title>Adabra Feed</title>
+                    <sort_order>10</sort_order>
+                </adabra_feed>
+            </resources>
+        </acl>
+    </api>
+</config>

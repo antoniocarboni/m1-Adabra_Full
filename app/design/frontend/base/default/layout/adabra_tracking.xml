@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <block type="adabra_tracking/base" name="adabra_tracking_base" template="adabra/tracking/base.phtml"/>
+        </reference>
+        <reference name="before_body_end">
+            <block type="adabra_tracking/queue" name="adabra_tracking_queue" template="adabra/tracking/action.phtml"/>
+        </reference>
+    </default>
+
+    <catalog_category_default>
+        <reference name="before_body_end">
+            <block type="adabra_tracking/category" name="adabra_tracking" template="adabra/tracking/action.phtml"/>
+        </reference>
+    </catalog_category_default>
+
+    <catalog_category_layered>
+        <reference name="before_body_end">
+            <block type="adabra_tracking/category" name="adabra_tracking" template="adabra/tracking/action.phtml"/>
+        </reference>
+    </catalog_category_layered>
+
+    <catalog_product_view>
+        <reference name="before_body_end">
+            <block type="adabra_tracking/product" name="adabra_tracking" template="adabra/tracking/action.phtml"/>
+        </reference>
+    </catalog_product_view>
+
+    <catalogsearch_result_index>
+        <reference name="before_body_end">
+            <block type="adabra_tracking/search" name="adabra_tracking" template="adabra/tracking/action.phtml"/>
+        </reference>
+    </catalogsearch_result_index>
+</layout>

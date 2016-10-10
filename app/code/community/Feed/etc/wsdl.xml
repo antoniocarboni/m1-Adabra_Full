@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:typens="urn:{{var wsdl.name}}"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             name="{{var wsdl.name}}" targetNamespace="urn:{{var wsdl.name}}">
+
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Magento">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/"
+                    schemaLocation="http://schemas.xmlsoap.org/soap/encoding/" />
+
+            <complexType name="adabraFeedEntity">
+                <all>
+                    <element name="code" type="xsd:string" minOccurs="0" />
+                    <element name="status_product" type="xsd:string" minOccurs="0" />
+                    <element name="status_category" type="xsd:string" minOccurs="0" />
+                    <element name="status_order" type="xsd:string" minOccurs="0" />
+                    <element name="status_customer" type="xsd:string" minOccurs="0" />
+                    <element name="update_time" type="xsd:string" minOccurs="0" />
+                    <element name="url_product" type="xsd:string" minOccurs="0" />
+                    <element name="url_category" type="xsd:string" minOccurs="0" />
+                    <element name="url_order" type="xsd:string" minOccurs="0" />
+                    <element name="url_customer" type="xsd:string" minOccurs="0" />
+                    <element name="active" type="xsd:boolean" minOccurs="0" />
+                </all>
+            </complexType>
+            <complexType name="adabraFeedEntityArray">
+                <complexContent>
+                    <restriction base="soapenc:Array">
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="typens:adabraFeedEntity[]" />
+                    </restriction>
+                </complexContent>
+            </complexType>
+        </schema>
+    </types>
+
+    <message name="adabraFeedListRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="websiteId" type="xsd:string" />
+    </message>
+    <message name="adabraFeedListResponse">
+        <part name="result" type="typens:feedEntityArray" />
+    </message>
+
+    <message name="adabraFeedRebuildRequest">
+        <part name="sessionId" type="xsd:string"/>
+        <part name="websiteId" type="xsd:string" />
+    </message>
+    <message name="adabraFeedRebuildResponse">
+        <part name="result" type="typens:feedEntityArray" />
+    </message>
+
+
+    <portType name="{{var wsdl.handler}}PortType">
+        <operation name="adabraFeedList">
+            <documentation>List feeds</documentation>
+            <input message="typens:adabraFeedListRequest" />
+            <output message="typens:adabraFeedListResponse" />
+        </operation>
+        <operation name="adabraFeedRebuild">
+            <documentation>List feeds</documentation>
+            <input message="typens:adabraFeedRebuildRequest" />
+            <output message="typens:adabraFeedRebuildResponse" />
+        </operation>
+    </portType>
+
+    <binding name="{{var wsdl.handler}}Binding" type="typens:{{var wsdl.handler}}PortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation name="adabraFeedList">
+            <soap:operation soapAction="urn:{{var wsdl.handler}}Action" />
+            <input>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="urn:{{var wsdl.name}}" use="encoded"
+                           encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+    </binding>
+
+    <service name="{{var wsdl.name}}Service">
+        <port name="{{var wsdl.handler}}Port" binding="typens:{{var wsdl.handler}}Binding">
+            <soap:address location="{{var wsdl.url}}" />
+        </port>
+    </service>
+</definitions>
