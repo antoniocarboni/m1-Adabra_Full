@@ -5,6 +5,7 @@ class Adabra_Feed_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_ORDER_STATES = 'adabra_feed/order/states';
 
     const XML_PATH_GENERAL_CRON = 'adabra_feed/general/use_cron';
+    const XML_PATH_GENERAL_COMPRESS = 'adabra_feed/general/compress';
     const XML_PATH_GENERAL_REBUILD_TIME = 'adabra_feed/general/rebuild_time';
 
     const XML_PATH_HTTP_ENABLED = 'adabra_feed/http/enabled';
@@ -39,6 +40,15 @@ class Adabra_Feed_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $xmlPath = static::XML_PATH_BATCH_SIZE.'/'.$type;
         return intval(Mage::getStoreConfig($xmlPath));
+    }
+
+    /**
+     * Get products batch size
+     * @return bool
+     */
+    public function getCompress()
+    {
+        return (bool) Mage::getStoreConfig(static::XML_PATH_GENERAL_COMPRESS);
     }
 
     /**

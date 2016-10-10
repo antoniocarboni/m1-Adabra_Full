@@ -93,6 +93,7 @@
             <general>
                 <use_cron>1</use_cron>
                 <rebuild_time>0,18</rebuild_time>
+                <compress>0</compress>
             </general>
             <http>
                 <enabled>0</enabled>

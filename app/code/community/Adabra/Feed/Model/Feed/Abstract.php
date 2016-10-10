@@ -511,12 +511,15 @@ abstract class Adabra_Feed_Model_Feed_Abstract
             $this->_assembleFiles();
             $this->changeBuildStatus(Adabra_Feed_Model_Source_Status::READY);
 
-            $this->_gzipCompression();
+            $compress = Mage::helper('adabra_feed')->getCompress();
+            if ($compress) {
+                $this->_gzipCompression();
+            }
 
             if (Mage::helper('adabra_feed')->isFtpEnabled()) {
                 Mage::helper('adabra_feed/ftp')->uploadFile(
-                    $exportPath . DS . $this->getExportFile(false, true),
-                    $this->getExportFile(false, true)
+                    $exportPath . DS . $this->getExportFile(false, $compress),
+                    $this->getExportFile(false, $compress)
                 );
             }
         }
