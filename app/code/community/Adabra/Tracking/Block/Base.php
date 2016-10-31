@@ -7,7 +7,11 @@ class Adabra_Tracking_Block_Base extends Adabra_Tracking_Block_Abstract
      */
     public function getDocumentTitle()
     {
-        return $this->getLayout()->getBlock('head')->getTitle();
+        if ($this->getLayout()->getBlock('head')) {
+            return $this->getLayout()->getBlock('head')->getTitle();
+        }
+
+        return '-';
     }
 
     /**
