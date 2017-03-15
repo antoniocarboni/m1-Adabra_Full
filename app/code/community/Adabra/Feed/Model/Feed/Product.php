@@ -258,6 +258,12 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
             }
         }
 
+        $price = $product->getPrice();
+        $finalPrice = Mage::getSingleton('catalogrule/rule')->calcProductPriceRule($product, $product->getFinalPrice());
+        if ($finalPrice == 0) {
+            $finalPrice = $product->getFinalPrice();
+        }
+
         return array(array(
             $product->getSku(),
             $categoryIds[0],
@@ -268,8 +274,8 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
             $this->getVirtualField($product, 'brand'),
             $this->getVirtualField($product, 'modello'),
             $this->getVirtualField($product, 'prezzo_spedizione'),
-            $this->_toCurrency($product->getPrice(), true),
-            $this->_toCurrency($product->getFinalPrice(), true),
+            $this->_toCurrency($price, true),
+            $this->_toCurrency($finalPrice, true),
             $this->getFeed()->getCurrency(),
             $this->getVirtualField($product, 'info_pagamento'),
             $this->_toBoolean($shippable),
