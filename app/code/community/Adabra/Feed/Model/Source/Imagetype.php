@@ -13,39 +13,26 @@
  * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   Adabra
- * @package    Adabra_Tracking
+ * @package    Adabra_Feed
  * @copyright  Copyright (c) 2017 Skeeller srl / MageSpecialist (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-abstract class Adabra_Tracking_Block_Abstract extends Mage_Core_Block_Template
+class Adabra_Feed_Model_Source_Imagetype extends Adabra_Feed_Model_Source_Abstract
 {
-    /**
-     * Return true if module can be shown
-     * @return bool
-     */
-    public function canShow()
+    public function toOptionArray()
     {
-        return Mage::helper('adabra_tracking')->getEnabled();
-    }
-
-    /**
-     * Get payload
-     * @param $key
-     * @param $values
-     * @return array
-     */
-    public function getPayload($key, $values)
-    {
-        if (!is_array($values)) {
-            $values = array($values);
-        }
-
-        $res = array($key);
-        foreach ($values as $value) {
-            $res[] = $value;
-        }
-
-        return $res;
+        return array(
+            array(
+                'value' => 'image',
+                'label' => 'Base image',
+            ), array(
+                'value' => 'small_image',
+                'label' => 'Small image',
+            ), array(
+                'value' => 'thumbnail',
+                'label' => 'Thumbnail',
+            ),
+        );
     }
 }

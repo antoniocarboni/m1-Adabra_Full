@@ -1,6 +1,7 @@
 .settings
 .project
 .git
-./*.DS_Store
+*/.DS_Store
+.DS_Store
 .idea
 *.codekit

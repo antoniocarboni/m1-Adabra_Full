@@ -1,4 +1,23 @@
 <?php
+/**
+ * MageSpecialist
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to info@magespecialist.it so we can send you a copy immediately.
+ *
+ * @category   Adabra
+ * @package    Adabra_Feed
+ * @copyright  Copyright (c) 2017 Skeeller srl / MageSpecialist (http://www.magespecialist.it)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
 class Adabra_Feed_Model_Feed_Order extends Adabra_Feed_Model_Feed_Abstract
 {
     const INTERVAL_DAYS = 365;
@@ -80,28 +99,37 @@ class Adabra_Feed_Model_Feed_Order extends Adabra_Feed_Model_Feed_Abstract
         foreach ($orderItems as $orderItem) {
             $isFirstRow = ($rowsCount == 0);
 
+            $cpId = 0;
+            $buyRequest = $orderItem->getProductOptionByCode('info_buyRequest');
+            if (isset($buyRequest['cpid'])) {
+                $cpId = $buyRequest['cpid'];
+            }
+
+            if ($cpId) {
+                $product = Mage::getModel('catalog/product')->load($cpId);
+                $productSku = $product->getSku();
+            } else {
+                if ($orderItem->getProductId()) {
+                    $product->setId($orderItem->getProductId());
+                }
+
+                $productSku = Mage::getResourceModel('catalog/product')
+                    ->getAttributeRawValue($orderItem->getProductId(), 'sku', $storeId);
+            }
+
             // Fake product to retrieve categories
-            $categoryIds = array();
-            if ($orderItem->getProductId()) {
-                $product->setId($orderItem->getProductId());
-                $categoryIds = $resourceProduct->getCategoryIds($product);
-            }
-
-            if (!count($categoryIds)) {
-                $categoryIds = array(Adabra_Feed_Model_Feed_Category::FAKE_CATEGORY_ID);
-            }
-
-            $productSku = Mage::getResourceModel('catalog/product')
-                ->getAttributeRawValue($orderItem->getProductId(), 'sku', $storeId);
+            $categoryIds = $resourceProduct->getCategoryIds($product);
 
             if (!$productSku) {
                 $productSku = $orderItem->getSku();
             }
 
+            $mainCategoryId = Mage::helper('adabra_feed')->getFirstValidCategory($categoryIds, $this->getStoreId());
+
             $return[] = array(
                 $customerId,
                 $incrementId,
-                $categoryIds[0],
+                $mainCategoryId,
                 $productSku,
                 $orderItem->getQtyOrdered(),
                 $order->getOrderCurrencyCode(),

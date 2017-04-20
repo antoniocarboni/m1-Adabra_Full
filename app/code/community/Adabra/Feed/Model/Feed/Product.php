@@ -1,4 +1,23 @@
 <?php
+/**
+ * MageSpecialist
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to info@magespecialist.it so we can send you a copy immediately.
+ *
+ * @category   Adabra
+ * @package    Adabra_Feed
+ * @copyright  Copyright (c) 2017 Skeeller srl / MageSpecialist (http://www.magespecialist.it)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
 class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
 {
     protected $_type = 'product';
@@ -220,11 +239,17 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
         ));
 
         // Must use this method due to 1.7 images on collection issue
+        $imageType = Mage::helper('adabra_feed')->getImageType();
         $productImage = Mage::getResourceSingleton('catalog/product')
-            ->getAttributeRawValue($product->getId(), 'image', $this->getStoreId());
+            ->getAttributeRawValue($product->getId(), $imageType, $this->getStoreId());
 
         if ($productImage && ($productImage != 'no_selection')) {
-            $imageUrl = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($productImage);
+            $imageSize = Mage::helper('adabra_feed')->getImageSize();
+            if ($imageSize) {
+                $imageUrl = Mage::helper('catalog/image')->init($product, $imageType)->resize($imageSize);
+            } else {
+                $imageUrl = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($productImage);
+            }
         } else {
             $imageUrl = '';
         }
@@ -264,9 +289,12 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
             $finalPrice = $product->getFinalPrice();
         }
 
+        // Find first category
+        $mainCategoryId = Mage::helper('adabra_feed')->getFirstValidCategory($categoryIds, $this->getStoreId());
+
         return array(array(
             $product->getSku(),
-            $categoryIds[0],
+            $mainCategoryId,
             $productUrl,
             $product->getName(),
             $product->getShortDescription() ?: $product->getName(),
