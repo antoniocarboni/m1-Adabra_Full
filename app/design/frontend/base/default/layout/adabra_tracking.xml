@@ -6,6 +6,7 @@
         </reference>
         <reference name="before_body_end">
             <block type="adabra_tracking/queue" name="adabra_tracking_queue" template="adabra/tracking/action.phtml"/>
+            <block type="adabra_tracking/private" name="adabra_tracking_private" template="adabra/tracking/action.phtml"/>
         </reference>
     </default>
 

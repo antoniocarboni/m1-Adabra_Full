@@ -22,7 +22,7 @@
 <config>
     <modules>
         <Adabra_Feed>
-            <version>0.1.17</version>
+            <version>0.2.0</version>
         </Adabra_Feed>
     </modules>
 

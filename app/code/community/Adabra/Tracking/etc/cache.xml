@@ -21,35 +21,17 @@
 -->
 <config>
     <placeholders>
-        <adabra_tracking_base>
-            <block>adabra_tracking/base</block>
-            <placeholder>ADABRA_TRACKING_BASE</placeholder>
-            <container>Adabra_Tracking_Model_Container_Nocache</container>
-            <cache_lifetime>86400</cache_lifetime>
-        </adabra_tracking_base>
-        <adabra_tracking_category>
-            <block>adabra_tracking/category</block>
-            <placeholder>ADABRA_TRACKING_CATEGORY</placeholder>
-            <container>Adabra_Tracking_Model_Container_Nocache</container>
-            <cache_lifetime>86400</cache_lifetime>
-        </adabra_tracking_category>
-        <adabra_tracking_product>
-            <block>adabra_tracking/product</block>
-            <placeholder>ADABRA_TRACKING_PRODUCT</placeholder>
-            <container>Adabra_Tracking_Model_Container_Nocache</container>
-            <cache_lifetime>86400</cache_lifetime>
-        </adabra_tracking_product>
         <adabra_tracking_queue>
             <block>adabra_tracking/queue</block>
             <placeholder>ADABRA_TRACKING_QUEUE</placeholder>
             <container>Adabra_Tracking_Model_Container_Nocache</container>
             <cache_lifetime>86400</cache_lifetime>
         </adabra_tracking_queue>
-        <adabra_tracking_search>
-            <block>adabra_tracking/search</block>
+        <adabra_tracking_private>
+            <block>adabra_tracking/private</block>
             <placeholder>ADABRA_TRACKING_SEARCH</placeholder>
             <container>Adabra_Tracking_Model_Container_Nocache</container>
             <cache_lifetime>86400</cache_lifetime>
-        </adabra_tracking_search>
+        </adabra_tracking_private>
     </placeholders>
 </config>
