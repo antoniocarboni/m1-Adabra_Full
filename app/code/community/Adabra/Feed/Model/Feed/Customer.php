@@ -42,12 +42,16 @@ class Adabra_Feed_Model_Feed_Customer extends Adabra_Feed_Model_Feed_Abstract
      */
     protected function _getIsNewsletterSubscriber(Mage_Customer_Model_Customer $customer)
     {
-        $subscriber = Mage::getSingleton('newsletter/subscriber');
-        $subscriber->clearInstance()->loadByEmail($customer->getEmail());
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
 
-        $res = $subscriber->getId() ? true : false;
-        $subscriber->clearInstance();
-        return $res;
+        $tableName = $readConnection->getTableName('newsletter_subscriber');
+        $qry = $readConnection->select()->from($tableName, 'subscriber_id')
+            ->where('subscriber_email = ' . $readConnection->quote($customer->getEmail()))
+            ->where('subscriber_status = 1')
+            ->limit(1);
+
+        return $readConnection->fetchOne($qry) ? true : false;
     }
 
     /**

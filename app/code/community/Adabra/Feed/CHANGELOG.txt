@@ -28,3 +28,7 @@ Images were not correctly exported on Magento 1.7 and 1.8
 
 0.1.17:
 SCP compatibility, FIX root category, Images resize
+
+0.2.2:
+Magento EE problems fix
+FIX newsletter call
