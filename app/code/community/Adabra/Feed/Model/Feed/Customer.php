@@ -47,7 +47,7 @@ class Adabra_Feed_Model_Feed_Customer extends Adabra_Feed_Model_Feed_Abstract
 
         $tableName = $readConnection->getTableName('newsletter_subscriber');
         $qry = $readConnection->select()->from($tableName, 'subscriber_id')
-            ->where('subscriber_email = ' . $readConnection->quote($customer->getEmail()))
+            ->where('customer_id = ' . $readConnection->quote($customer->getId()))
             ->where('subscriber_status = 1')
             ->limit(1);
 
