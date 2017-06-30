@@ -45,7 +45,7 @@ class Adabra_Feed_Model_Feed extends Mage_Core_Model_Abstract
      * @param string $scope
      * @return string
      */
-    public function getCode($scope)
+    public function getCode($scope = 'store')
     {
         if ($scope == 'website') {
             return strtolower($this->getStore()->getWebsite()->getCode());

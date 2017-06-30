@@ -265,12 +265,12 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
         $productUrl = $product->getProductUrl();
 
         $isVisible = in_array(
-            $product->getVisibility(),
-            array(
-                Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
-                Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
-            )
-        ) && $product->getStatus();
+                $product->getVisibility(),
+                array(
+                    Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
+                    Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
+                )
+            ) && ($product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
 
         $qty = $this->_getStockQty($product);
 
