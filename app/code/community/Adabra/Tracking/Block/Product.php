@@ -77,14 +77,6 @@ class Adabra_Tracking_Block_Product extends Adabra_Tracking_Block_Abstract
             )
         );
 
-        $productTags = $this->_getTagsList();
-        if (count($productTags)) {
-            $res[] = array(
-                'key' => 'setCtxParamTags',
-                'value' => implode(',', $productTags),
-            );
-        }
-
         return $res;
     }
 }
