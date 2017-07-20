@@ -29,6 +29,8 @@ class Adabra_Feed_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_GENERAL_IMAGE_SIZE = 'adabra_feed/general/image_size';
     const XML_PATH_GENERAL_REBUILD_TIME = 'adabra_feed/general/rebuild_time';
 
+    const XML_PATH_GENERAL_CUSTOM_TAGS = 'adabra_feed/custom_tags/custom_tags_list';
+
     const XML_PATH_HTTP_ENABLED = 'adabra_feed/http/enabled';
     const XML_PATH_HTTP_USER = 'adabra_feed/http/user';
     const XML_PATH_HTTP_PASS = 'adabra_feed/http/pass';
@@ -261,5 +263,14 @@ class Adabra_Feed_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         return $mainCategoryId;
+    }
+
+    /**
+     * Get a list of product custom attribute (tags)
+     * @return array
+     */
+    public function getCustomTagsList()
+    {
+        return preg_split('/[\r\n]+/', trim(Mage::getStoreConfig(self::XML_PATH_GENERAL_CUSTOM_TAGS)));
     }
 }

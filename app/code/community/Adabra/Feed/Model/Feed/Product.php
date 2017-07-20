@@ -163,6 +163,29 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
         return array_unique($out);
     }
 
+    protected function _getCustomTagsList(Mage_Catalog_Model_Product $product)
+    {
+        $taglist = '';
+        $tagsListArray = Mage::helper('adabra_feed')->getCustomTagsList();
+        foreach ($tagsListArray as $tag) {
+            if($product->getAttributeText($tag) || $product->getData($tag)) {
+                if($product->getAttributeText($tag) == false) {
+                    $taglist .= $product->getData($tag).'|';
+                } else {
+                    if($product->getResource()->getAttribute($tag)->getFrontendInput() == 'boolean') {
+                        $taglist .= $tag.'|';
+                    } else {
+                        $taglist .= $product->getAttributeText($tag).'|';
+                    }
+
+                }
+//                $currentAttribute = $product->getResource()->getAttribute($tag);
+//
+            }
+        }
+        return $taglist;
+    }
+
     /**
      * Get stock sum for children products
      * @param Mage_Catalog_Model_Product $product
@@ -292,6 +315,12 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
         // Find first category
         $mainCategoryId = Mage::helper('adabra_feed')->getFirstValidCategory($categoryIds, $this->getStoreId());
 
+        $tagsList = '';
+        $tagsList = $this->_getCustomTagsList($product);
+
+
+
+
         return array(array(
             $product->getSku(),
             $mainCategoryId,
@@ -329,7 +358,7 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
             $this->getVirtualField($product, 'MUZEID'),
             $this->getVirtualField($product, 'MPN'),
             implode('|', $relatedSkus),
-            '',
+            $tagsList,
             implode('|', $categories),
         ));
     }
