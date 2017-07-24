@@ -165,17 +165,19 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
 
     protected function _getCustomTagsList(Mage_Catalog_Model_Product $product)
     {
-        $taglist = '';
+        $tagList = [];
         $tagsListArray = Mage::helper('adabra_feed')->getCustomTagsList();
         foreach ($tagsListArray as $tag) {
-            if($product->getAttributeText($tag) || $product->getData($tag)) {
-                if($product->getAttributeText($tag) == false) {
-                    $taglist .= $product->getData($tag).'|';
+            if($product->getData($tag) || $product->getAttributeText($tag)) {
+                if($product->getAttributeText($tag) === false) {
+                    $tagList[] = $product->getData($tag);
                 } else {
                     if($product->getResource()->getAttribute($tag)->getFrontendInput() == 'boolean') {
-                        $taglist .= $tag.'|';
+                        if($product->getAttributeText($tag) == 'Yes') {
+                            $tagList[] = $tag;
+                        }
                     } else {
-                        $taglist .= $product->getAttributeText($tag).'|';
+                        $tagList[] = $product->getAttributeText($tag);
                     }
 
                 }
@@ -183,7 +185,8 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
 //
             }
         }
-        return $taglist;
+        $tagListStr = implode("|",$tagList);
+        return $tagListStr;
     }
 
     /**
