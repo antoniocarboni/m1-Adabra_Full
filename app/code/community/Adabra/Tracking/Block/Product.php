@@ -53,6 +53,35 @@ class Adabra_Tracking_Block_Product extends Adabra_Tracking_Block_Abstract
         return $tagsList;
     }
 
+    /**
+     * Get a list of custom tags for this product
+     * @return array
+     */
+    protected function _getCustomTagsList(Mage_Catalog_Model_Product $product)
+    {
+        $tagList = [];
+        $tagsListArray = Mage::helper('adabra_feed')->getCustomTagsList();
+        foreach ($tagsListArray as $tag) {
+            if($product->getData($tag) || $product->getAttributeText($tag)) {
+                if($product->getAttributeText($tag) === false) {
+                    $tagList[] = $product->getData($tag);
+                } else {
+                    if($product->getResource()->getAttribute($tag)->getFrontendInput() == 'boolean') {
+                        if($product->getAttributeText($tag) == 'Yes') {
+                            $tagList[] = $tag;
+                        }
+                    } else {
+                        $tagList[] = $product->getAttributeText($tag);
+                    }
+
+                }
+//                $currentAttribute = $product->getResource()->getAttribute($tag);
+//
+            }
+        }
+        return $tagList;
+    }
+
     public function getTrackingProperties()
     {
         $value = array($this->getProduct()->getSku());
@@ -76,6 +105,14 @@ class Adabra_Tracking_Block_Product extends Adabra_Tracking_Block_Abstract
                 'value' => $brand,
             )
         );
+
+        $productTags = $this->_getCustomTagsList($this->getProduct());
+        if (count($productTags)) {
+            $res[] = array(
+                'key' => 'setCtxParamTags',
+                'value' => implode(',', $productTags),
+            );
+        }
 
         return $res;
     }
