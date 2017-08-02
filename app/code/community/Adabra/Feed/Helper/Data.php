@@ -271,6 +271,11 @@ class Adabra_Feed_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getCustomTagsList()
     {
-        return preg_split('/[\r\n]+/', trim(Mage::getStoreConfig(self::XML_PATH_GENERAL_CUSTOM_TAGS)));
+        $result = [];
+        $listAttributes = trim(Mage::getStoreConfig(self::XML_PATH_GENERAL_CUSTOM_TAGS));
+        if($listAttributes != "") {
+            $result = preg_split('/[\r\n]+/', $listAttributes);
+        }
+        return $result;
     }
 }
