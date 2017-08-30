@@ -35,7 +35,7 @@ class Adabra_Tracking_Block_Private extends Adabra_Tracking_Block_Abstract
         );
 
         foreach ($quoteItems as $quoteItem) {
-            $out['ids'][] = $quoteItem->getSku();
+          $out['ids'][] = $quoteItem->getProduct()->getData('sku');
             $out['qty'][] = $quoteItem->getQty();
         }
 
