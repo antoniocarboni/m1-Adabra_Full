@@ -35,7 +35,7 @@ class Adabra_Tracking_Model_Observer
           }
         }
 
-        $productSku = $product->getSku();
+        $productSku = $product->getData('sku');
         if (Mage::helper('adabra_tracking')->isBlacklistedSku($productSku)) {
             return;
         }
