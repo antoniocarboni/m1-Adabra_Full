@@ -118,16 +118,16 @@ class Adabra_Feed_Model_Feed_Customer extends Adabra_Feed_Model_Feed_Abstract
 
         $dob = preg_split('/\D+/', $customer->getDob());
 
-        if ( ! isset($dob[0])) {
-          $dob[0] = '';
+        if (!isset($dob[0])) {
+            $dob[0] = '';
         }
 
-        if ( ! isset($dob[1])) {
-          $dob[1] = '';
+        if (!isset($dob[1])) {
+            $dob[1] = '';
         }
 
-        if ( ! isset($dob[2])) {
-          $dob[2] = '';
+        if (!isset($dob[2])) {
+            $dob[2] = '';
         }
 
         return array(array(

@@ -29,10 +29,10 @@ class Adabra_Tracking_Model_Observer
         if ($cpId) {
             $product = Mage::getModel('catalog/product')->load($cpId);
         } else {
-          $product = $event->getEvent()->getProduct();
-          if($event->getQuoteItem()->getParentItem()) {
-            $product = $event->getQuoteItem()->getParentItem()->getProduct();
-          }
+            $product = $event->getEvent()->getProduct();
+            if ($event->getQuoteItem()->getParentItem()) {
+                $product = $event->getQuoteItem()->getParentItem()->getProduct();
+            }
         }
 
         $productSku = $product->getData('sku');
@@ -45,8 +45,8 @@ class Adabra_Tracking_Model_Observer
 
     protected function _quoteRemoveItem(Mage_Sales_Model_Quote_Item $quoteItem)
     {
-      // sistemare
-      $productSku = $quoteItem->getProduct()->getData('sku');
+        // sistemare
+        $productSku = $quoteItem->getProduct()->getData('sku');
         if (Mage::helper('adabra_tracking')->isBlacklistedSku($productSku)) {
             return;
         }
@@ -87,8 +87,8 @@ class Adabra_Tracking_Model_Observer
     protected function _toTimestamp($ts)
     {
         return
-            Mage::getSingleton('core/date')->date('Y-m-d', $ts).'T'
-            .Mage::getSingleton('core/date')->date('H:i:s', $ts);
+            Mage::getSingleton('core/date')->date('Y-m-d', $ts) . 'T'
+            . Mage::getSingleton('core/date')->date('H:i:s', $ts);
     }
 
     public function salesOrderPlaceAfter($event)
@@ -106,7 +106,7 @@ class Adabra_Tracking_Model_Observer
         foreach ($orderItems as $orderItem) {
             $isFirstRow = ($rowsCount == 0);
 
-          $productSku = $orderItem->getProduct()->getData('sku');
+            $productSku = $orderItem->getProduct()->getData('sku');
             if (Mage::helper('adabra_tracking')->isBlacklistedSku($productSku)) {
                 continue;
             }
