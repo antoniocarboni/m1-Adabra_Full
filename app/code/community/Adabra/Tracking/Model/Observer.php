@@ -106,7 +106,7 @@ class Adabra_Tracking_Model_Observer
         foreach ($orderItems as $orderItem) {
             $isFirstRow = ($rowsCount == 0);
 
-            $productSku = $orderItem->getSku();
+          $productSku = $orderItem->getProduct()->getData('sku');
             if (Mage::helper('adabra_tracking')->isBlacklistedSku($productSku)) {
                 continue;
             }
