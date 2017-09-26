@@ -23,6 +23,23 @@ class Adabra_Feed_Model_Feed_Customer extends Adabra_Feed_Model_Feed_Abstract
     protected $_type = 'customer';
     protected $_exportName = 'customers';
     protected $_scope = 'website';
+    protected $_virtualFields = array();
+
+
+    /**
+     * Get virtual field model
+     * @param $fieldName
+     * @return Adabra_Feed_Model_Source_Vfield
+     */
+    protected function _getVirtualFieldModel($fieldName)
+    {
+        if (!isset($this->_virtualFields[$fieldName])) {
+            $this->_virtualFields[$fieldName] = Mage::getModel('adabra_feed/vfield');
+            $this->_virtualFields[$fieldName]->load($fieldName, 'code');
+        }
+
+        return $this->_virtualFields[$fieldName];
+    }
 
     /**
      * Get virtual field
@@ -32,7 +49,8 @@ class Adabra_Feed_Model_Feed_Customer extends Adabra_Feed_Model_Feed_Abstract
      */
     protected function _getVirtualField(Mage_Customer_Model_Customer $customer, $fieldName)
     {
-        return '';
+        $fieldModel = $this->_getVirtualFieldModel($fieldName);
+        return $fieldModel->getCustomerValue($customer);
     }
 
     /**
@@ -100,6 +118,7 @@ class Adabra_Feed_Model_Feed_Customer extends Adabra_Feed_Model_Feed_Abstract
             'user_agent',
             'f_attivo',
             'f_cancellato',
+            'fidelity_card',
         );
     }
 
@@ -158,6 +177,7 @@ class Adabra_Feed_Model_Feed_Customer extends Adabra_Feed_Model_Feed_Abstract
             '',
             $this->_toBoolean(true),
             $this->_toBoolean(false),
+            $this->_getVirtualField($customer, 'fidelity_card'),
         ));
     }
 }

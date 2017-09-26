@@ -43,6 +43,7 @@ class Adabra_Feed_Model_Source_Vfield extends Adabra_Feed_Model_Source_Abstract
             array('value' => 'CNET', 'label' => 'CNET'),
             array('value' => 'MUZEID', 'label' => 'MUZEID'),
             array('value' => 'MPN', 'label' => 'MPN'),
+            array('value' => 'fidelity_card', 'label' => 'fidelity_card'),
         );
     }
 }
