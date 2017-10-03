@@ -34,8 +34,11 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
     protected function _getVirtualFieldModel($fieldName)
     {
         if (!isset($this->_virtualFields[$fieldName])) {
-            $this->_virtualFields[$fieldName] = Mage::getModel('adabra_feed/vfield');
-            $this->_virtualFields[$fieldName]->load($fieldName, 'code');
+            $this->_virtualFields[$fieldName] = Mage::getModel('adabra_feed/vfield')
+                ->getCollection()
+                ->addFieldToFilter('vfield_type', ['eq' => Adabra_Feed_Model_Source_Vfield_Type::TYPE_PRODUCT])
+                ->addFieldToFilter('code', ['eq' => $fieldName])
+                ->getFirstItem();
         }
 
         return $this->_virtualFields[$fieldName];
