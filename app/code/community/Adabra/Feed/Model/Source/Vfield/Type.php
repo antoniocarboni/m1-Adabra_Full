@@ -22,4 +22,12 @@ class Adabra_Feed_Model_Source_Vfield_Type extends Adabra_Feed_Model_Source_Abst
 {
     const TYPE_CUSTOMER = 'customer';
     const TYPE_PRODUCT = 'product';
+
+    public function toOptionArray()
+    {
+        return array(
+            array('value' => self::TYPE_CUSTOMER, 'label' => 'Customer attribute'),
+            array('value' => self::TYPE_PRODUCT, 'label' => 'Product attribute'),
+        );
+    }
 }

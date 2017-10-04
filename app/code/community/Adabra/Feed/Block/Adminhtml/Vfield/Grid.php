@@ -55,6 +55,13 @@ class Adabra_Feed_Block_Adminhtml_Vfield_Grid extends Mage_Adminhtml_Block_Widge
             'options' => Mage::getSingleton('adabra_feed/source_vfield_mode')->toHashArray(),
         ));
 
+        $this->addColumn('vfield_type', array(
+            'header' => Mage::helper('adabra_feed')->__('Type'),
+            'index' => 'vfield_type',
+            'type' => 'options',
+            'options' => Mage::getSingleton('adabra_feed/source_vfield_type')->toHashArray(),
+        ));
+
         $this->addColumn('value', array(
             'header' => Mage::helper('adabra_feed')->__('Value'),
             'index' => 'value',
