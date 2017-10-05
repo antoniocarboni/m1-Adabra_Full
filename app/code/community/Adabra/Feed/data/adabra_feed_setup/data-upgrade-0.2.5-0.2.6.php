@@ -25,12 +25,19 @@ $installer->startSetup();
 
 // Fill v-fields
 $tableName = $installer->getTable('adabra_feed/vfield');
-$vField = 'fidelity_card';
 
 $installer->getConnection()->insert($tableName, array(
-    'code' => $vField,
+    'code' => 'fidelity_card',
     'mode' => 'map',
-    'value' => strtolower($vField),
+    'value' => strtolower('fidelity_card'),
+    'vfield_type' => Adabra_Feed_Model_Source_Vfield_Type::TYPE_CUSTOMER
 ));
+
+$vFields = Mage::getSingleton('adabra_feed/source_vfield')->toArray();
+foreach ($vFields as $vField) {
+    $data  = array('vfield_type' => Adabra_Feed_Model_Source_Vfield_Type::TYPE_PRODUCT);
+    $where = array('code = ?' => $vField);
+    $installer->getConnection()->update($tableName, $data, $where);
+}
 
 $installer->endSetup();

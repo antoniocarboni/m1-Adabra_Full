@@ -22,7 +22,7 @@
 <config>
     <modules>
         <Adabra_Common>
-            <version>0.2.7</version>
+            <version>0.2.6</version>
         </Adabra_Common>
     </modules>
     <global>
