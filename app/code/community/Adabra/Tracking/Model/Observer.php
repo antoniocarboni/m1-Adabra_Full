@@ -129,6 +129,33 @@ class Adabra_Tracking_Model_Observer
                 $this->_toTimestamp($createdAt),
             ));
 
+            // If is bundle
+            $_product = $orderItem->getProduct();
+            if($_product->getTypeID() === 'bundle') {
+                $collection = $_product->getTypeInstance(true)
+                    ->getSelectionsCollection($_product->getTypeInstance(true)->getOptionsIds($_product), $_product);
+
+                $itemIds = array();
+
+                foreach ($collection as $item) {
+                    $itemIds[] = $item->getId();
+
+                    $queue->addAction('trkProductSale', array(
+                        $order->getIncrementId(),
+                        $item->getSku(),
+                        $item->getSelectionQty(),
+                        '',
+                        $item->getPrice(),
+                        '',
+                        '',
+                        '',
+                        '',
+                        $productSku,
+                    ));
+                }
+            }
+
+
             $rowsCount++;
         }
     }
