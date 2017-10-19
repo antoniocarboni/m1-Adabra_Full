@@ -67,14 +67,8 @@ class Adabra_Tracking_Block_Product extends Adabra_Tracking_Block_Abstract
         $value[] = $brand;
 
         $res = array(
-            array(
-                'key' => 'trkProductView',
-                'value' => $value,
-            ),
-            array(
-                'key' => 'setCtxParamBrands',
-                'value' => $brand,
-            )
+            array('key' => 'trkProductView', 'value' => $value),
+            array('key' => 'setCtxParamBrands', 'value' => $brand)
         );
 
         return $res;

@@ -34,20 +34,6 @@ class Adabra_Tracking_Block_Base extends Adabra_Tracking_Block_Abstract
     }
 
     /**
-     * Get user ID
-     * @return int
-     */
-    public function getSiteUserId()
-    {
-        $helperCustomer = Mage::helper('customer');
-        if ($helperCustomer->isLoggedIn()) {
-            return $helperCustomer->getCustomer()->getId();
-        }
-
-        return 0;
-    }
-
-    /**
      * Get document's language
      * @return string
      */
@@ -96,8 +82,6 @@ class Adabra_Tracking_Block_Base extends Adabra_Tracking_Block_Abstract
             array('key' => 'setLanguage', 'value' => $this->getLanguage()),
             array('key' => 'setSiteId', 'value' => $this->getSiteId()),
             array('key' => 'setCatalogId', 'value' => $this->getCatalogId()),
-            array('key' => 'setSiteUserId', 'value' => $this->getSiteUserId()),
-
             array('key' => 'setPageType', 'value' => $pageType),
         );
 

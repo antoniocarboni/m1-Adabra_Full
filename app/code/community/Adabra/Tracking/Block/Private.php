@@ -21,6 +21,20 @@
 class Adabra_Tracking_Block_Private extends Adabra_Tracking_Block_Abstract
 {
     /**
+     * Get user ID
+     * @return int
+     */
+    public function getSiteUserId()
+    {
+        $helperCustomer = Mage::helper('customer');
+        if ($helperCustomer->isLoggedIn()) {
+            return $helperCustomer->getCustomer()->getId();
+        }
+
+        return 0;
+    }
+
+    /**
      * Return cart products information
      * @return array
      */
@@ -51,6 +65,7 @@ class Adabra_Tracking_Block_Private extends Adabra_Tracking_Block_Abstract
         $cartProductsInformation = $this->getCartProductInfo();
 
         return array(
+            array('key' => 'setSiteUserId', 'value' => $this->getSiteUserId()),
             array('key' => 'setCtxParamProductIds', 'value' => implode(',', $cartProductsInformation['ids'])),
             array('key' => 'setCtxParamProductQuantities', 'value' => implode(',', $cartProductsInformation['qty'])),
         );
