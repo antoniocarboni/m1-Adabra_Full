@@ -129,7 +129,7 @@ class Adabra_Tracking_Model_Observer
                 $this->_toTimestamp($createdAt),
             ));
 
-            // If is bundle
+            // TODO: adabra
             $_product = $orderItem->getProduct();
             if($_product->getTypeID() === 'bundle') {
                 $collection = $_product->getTypeInstance(true)
@@ -140,15 +140,19 @@ class Adabra_Tracking_Model_Observer
                 foreach ($collection as $item) {
                     $itemIds[] = $item->getId();
 
+                    $childProduct = Mage::getModel('catalog/product')->load($item->getId());
+                    $childPriceWithoutTax = Mage::helper('tax')->getPrice($childProduct, $childProduct->getFinalPrice(), false);
+
                     $queue->addAction('trkProductSale', array(
                         $order->getIncrementId(),
                         $item->getSku(),
                         $item->getSelectionQty(),
                         '',
-                        $item->getPrice(),
+                        $childPriceWithoutTax,
+                        $item->getFinalPrice(),
                         '',
                         '',
-                        '',
+                        $this->_toTimestamp($createdAt),
                         '',
                         $productSku,
                     ));
