@@ -3,16 +3,6 @@
     <default>
         <reference name="head">
             <block type="adabra_tracking/base" name="adabra_tracking_base" template="adabra/tracking/base.phtml" />
-        </reference>
-        <reference name="before_body_end">
-            <block type="adabra_tracking/queue" name="adabra_tracking_queue" template="adabra/tracking/action.phtml">
-                <action method="setEsiOptions">
-                    <params>
-                        <access>private</access>
-                        <ttl>0</ttl>
-                    </params>
-                </action>
-            </block>
             <block type="adabra_tracking/private" name="adabra_tracking_private" template="adabra/tracking/action.phtml">
                 <action method="setEsiOptions">
                     <params>
@@ -23,6 +13,16 @@
                             <customer_login />
                             <customer_logout />
                         </flush_events>
+                    </params>
+                </action>
+            </block>
+        </reference>
+        <reference name="before_body_end">
+            <block type="adabra_tracking/queue" name="adabra_tracking_queue" template="adabra/tracking/action.phtml">
+                <action method="setEsiOptions">
+                    <params>
+                        <access>private</access>
+                        <ttl>0</ttl>
                     </params>
                 </action>
             </block>
