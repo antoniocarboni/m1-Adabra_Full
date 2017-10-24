@@ -18,34 +18,30 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-abstract class Adabra_Tracking_Block_Abstract extends Mage_Core_Block_Template
+class Adabra_Tracking_Block_Userinfo extends Adabra_Tracking_Block_Template
 {
     /**
-     * Return true if module can be shown
-     * @return bool
+     * Get user ID
+     * @return int
      */
-    public function canShow()
+    public function getSiteUserId()
     {
-        return Mage::helper('adabra_tracking')->getEnabled();
+        $helperCustomer = Mage::helper('customer');
+        if ($helperCustomer->isLoggedIn()) {
+            return $helperCustomer->getCustomer()->getId();
+        }
+
+        return 0;
     }
 
     /**
-     * Get payload
-     * @param $key
-     * @param $values
+     * Get tracking properties
      * @return array
      */
-    public function getPayload($key, $values)
+    public function getTrackingProperties()
     {
-        if (!is_array($values)) {
-            $values = array($values);
-        }
-
-        $res = array($key);
-        foreach ($values as $value) {
-            $res[] = $value;
-        }
-
-        return $res;
+        return array(
+            array('key' => 'setSiteUserId', 'value' => $this->getSiteUserId()),
+        );
     }
 }

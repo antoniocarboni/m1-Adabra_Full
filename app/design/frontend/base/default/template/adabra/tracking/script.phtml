@@ -6,10 +6,6 @@ $coreHelper = Mage::helper('core');
 <?php if ($this->canShow()) : ?>
     <!-- ADABRA TRACKING SCRIPT START -->
     <script type="text/javascript">
-        var _sbnaq = _sbnaq || [];
-        <?php foreach ($properties as $property) : ?>
-        _sbnaq.push(<?php echo $coreHelper->jsonEncode($this->getPayload($property['key'], $property['value'])) ?>);
-        <?php endforeach; ?>
         _sbnaq.push(['trkPageView']);
 
         (function() {

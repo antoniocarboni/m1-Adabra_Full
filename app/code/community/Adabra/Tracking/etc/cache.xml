@@ -27,11 +27,17 @@
             <container>Adabra_Tracking_Model_Container_Nocache</container>
             <cache_lifetime>86400</cache_lifetime>
         </adabra_tracking_queue>
-        <adabra_tracking_private>
-            <block>adabra_tracking/private</block>
+        <adabra_tracking_cartinfo>
+            <block>adabra_tracking/cartinfo</block>
             <placeholder>ADABRA_TRACKING_SEARCH</placeholder>
             <container>Adabra_Tracking_Model_Container_Nocache</container>
             <cache_lifetime>86400</cache_lifetime>
-        </adabra_tracking_private>
+        </adabra_tracking_cartinfo>
+        <adabra_tracking_userinfo>
+            <block>adabra_tracking/userinfo</block>
+            <placeholder>ADABRA_TRACKING_SEARCH</placeholder>
+            <container>Adabra_Tracking_Model_Container_Nocache</container>
+            <cache_lifetime>86400</cache_lifetime>
+        </adabra_tracking_userinfo>
     </placeholders>
 </config>
