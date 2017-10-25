@@ -61,15 +61,6 @@ class Adabra_Tracking_Block_Pageinfo extends Adabra_Tracking_Block_Template
     }
 
     /**
-     * Get adabra tracking host
-     * @return string
-     */
-    public function getAdabraTrackingHost()
-    {
-        return Mage::helper('adabra_tracking')->getAdabraTrackingHost();
-    }
-
-    /**
      * Get tracking properties
      * @return array
      */

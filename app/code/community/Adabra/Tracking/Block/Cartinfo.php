@@ -20,39 +20,5 @@
 
 class Adabra_Tracking_Block_Cartinfo extends Adabra_Tracking_Block_Template
 {
-    /**
-     * Return cart products information
-     * @return array
-     */
-    public function getCartProductInfo()
-    {
-        $quote = Mage::getSingleton('checkout/cart')->getQuote();
-        $quoteItems = $quote->getAllVisibleItems();
 
-        $out = array(
-            'ids' => array(),
-            'qty' => array(),
-        );
-
-        foreach ($quoteItems as $quoteItem) {
-            $out['ids'][] = $quoteItem->getProduct()->getData('sku');
-            $out['qty'][] = $quoteItem->getQty();
-        }
-
-        return $out;
-    }
-
-    /**
-     * Get tracking properties
-     * @return array
-     */
-    public function getTrackingProperties()
-    {
-        $cartProductsInformation = $this->getCartProductInfo();
-
-        return array(
-            array('key' => 'setCtxParamProductIds', 'value' => implode(',', $cartProductsInformation['ids'])),
-            array('key' => 'setCtxParamProductQuantities', 'value' => implode(',', $cartProductsInformation['qty'])),
-        );
-    }
 }

@@ -4,27 +4,7 @@
         <reference name="head">
             <block type="adabra_tracking/template" before="-" name="adabra_tracking_init"
                    template="adabra/tracking/init.phtml"/>
-            <block type="adabra_tracking/userinfo" after="adabra_tracking_init" name="adabra_tracking_userinfo"
-                   template="adabra/tracking/action.phtml">
-                <action method="setEsiOptions">
-                    <params>
-                        <access>private</access>
-                        <flush_events>
-                            <customer_register_success/>
-                            <customer_login/>
-                            <customer_logout/>
-                        </flush_events>
-                    </params>
-                </action>
-            </block>
-            <block type="adabra_tracking/pageinfo" after="adabra_tracking_userinfo" name="adabra_tracking_pageinfo"
-                   template="adabra/tracking/action.phtml"/>
-            <block type="adabra_tracking/template" after="adabra_tracking_pageinfo" name="adabra_tracking_script"
-                   template="adabra/tracking/script.phtml"/>
-        </reference>
-
-        <reference name="before_body_end">
-            <block type="adabra_tracking/cartinfo" name="adabra_tracking_cartinfo"
+            <block type="adabra_tracking/private" after="adabra_tracking_init" name="adabra_tracking_private"
                    template="adabra/tracking/action.phtml">
                 <action method="setEsiOptions">
                     <params>
@@ -38,6 +18,13 @@
                     </params>
                 </action>
             </block>
+            <block type="adabra_tracking/pageinfo" after="adabra_tracking_private" name="adabra_tracking_pageinfo"
+                   template="adabra/tracking/action.phtml"/>
+            <block type="adabra_tracking/template" after="adabra_tracking_pageinfo" name="adabra_tracking_script"
+                   template="adabra/tracking/script.phtml"/>
+        </reference>
+
+        <reference name="before_body_end">
             <block type="adabra_tracking/queue" name="adabra_tracking_queue" template="adabra/tracking/action.phtml">
                 <action method="setEsiOptions">
                     <params>
