@@ -91,6 +91,26 @@ class Adabra_Tracking_Model_Observer
             . Mage::getSingleton('core/date')->date('H:i:s', $ts);
     }
 
+    /**
+     * @param $order Mage_Sales_Model_Order
+     * @return array
+     */
+    public function getAllBundleItems($order)
+    {
+        $items = array();
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getParentItemId()) {
+                $productType = Mage::getModel('sales/order_item')->load($item->getParentItemId())->getProductType();
+                if ($productType === 'bundle') {
+                    $items[] = $item;
+                }
+            } else {
+                $items[] = $item;
+            }
+        }
+        return $items;
+    }
+
     public function salesOrderPlaceAfter($event)
     {
         /** @var $order Mage_Sales_Model_Order */
@@ -101,7 +121,7 @@ class Adabra_Tracking_Model_Observer
         $rowsCount = 0;
         $createdAt = Varien_Date::toTimestamp($order->getCreatedAt());
 
-        $orderItems = $order->getAllVisibleItems();
+        $orderItems = $this->getAllBundleItems($order);
 
         foreach ($orderItems as $orderItem) {
             $isFirstRow = ($rowsCount == 0);
@@ -116,49 +136,31 @@ class Adabra_Tracking_Model_Observer
                 $couponCode = '';
             }
 
+            $partentItemSku = '';
+            $price = $orderItem->getPrice();
+            $priceInclTax = $orderItem->getPriceInclTax();
+
+
+            if($orderItem->getParentItem()) {
+                $partentItemSku = $orderItem->getParentItem()->getProduct()->getData('sku');
+                $price = $orderItem->getProduct()->getFinalPrice();
+                $priceInclTax = Mage::helper('tax')->getPrice($orderItem->getProduct(), $price, false);
+            }
+
             /** @var $orderItem Mage_Sales_Model_Order_Item */
             $queue->addAction('trkProductSale', array(
                 $order->getIncrementId(),
                 $productSku,
                 $orderItem->getQtyOrdered(),
                 $isFirstRow ? $couponCode : '',
-                $orderItem->getPrice(),
-                $orderItem->getPriceInclTax(),
+                $price,
+                $priceInclTax,
                 $isFirstRow ? $this->_toCurrency($order->getShippingAmount()) : '',
                 $order->getOrderCurrencyCode(),
                 $this->_toTimestamp($createdAt),
+                '',
+                $partentItemSku
             ));
-
-            // TODO: adabra
-            $_product = $orderItem->getProduct();
-            if($_product->getTypeID() === 'bundle') {
-                $collection = $_product->getTypeInstance(true)
-                    ->getSelectionsCollection($_product->getTypeInstance(true)->getOptionsIds($_product), $_product);
-
-                $itemIds = array();
-
-                foreach ($collection as $item) {
-                    $itemIds[] = $item->getId();
-
-                    $childProduct = Mage::getModel('catalog/product')->load($item->getId());
-                    $childPriceWithoutTax = Mage::helper('tax')->getPrice($childProduct, $childProduct->getFinalPrice(), false);
-
-                    $queue->addAction('trkProductSale', array(
-                        $order->getIncrementId(),
-                        $item->getSku(),
-                        $item->getSelectionQty(),
-                        '',
-                        $childPriceWithoutTax,
-                        $item->getFinalPrice(),
-                        '',
-                        '',
-                        $this->_toTimestamp($createdAt),
-                        '',
-                        $productSku,
-                    ));
-                }
-            }
-
 
             $rowsCount++;
         }
