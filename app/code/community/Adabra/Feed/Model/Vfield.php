@@ -60,4 +60,40 @@ class Adabra_Feed_Model_Vfield extends Mage_Core_Model_Abstract
 
         return '';
     }
+
+    /**
+     * Get computed value
+     * @param Mage_Customer_Model_Customer $customer
+     * @return string
+     */
+    public function getCustomerValue(Mage_Customer_Model_Customer $customer)
+    {
+        switch ($this->getMode()) {
+//            case Adabra_Feed_Model_Source_Vfield_Mode::MODE_STATIC:
+//                return $this->getValue();
+//
+//            case Adabra_Feed_Model_Source_Vfield_Mode::MODE_EMPTY:
+//                return '';
+
+            case Adabra_Feed_Model_Source_Vfield_Mode::MODE_MAP:
+                $attributeCode = $this->getValue();
+
+                if (!$customer->getResource()->getAttribute($attributeCode)) {
+                    return '';
+                }
+
+                return $customer->getData($this->getValue()) ?: $customer->getData($this->getValue());
+
+//            case Adabra_Feed_Model_Source_Vfield_Mode::MODE_MODEL:
+//                $hash = Mage::getSingleton($this->getValue())->toHashArray();
+//
+//                if (isset($hash[$this->getValue()])) {
+//                    return $hash[$this->getValue()];
+//                }
+//
+//                return '';
+        }
+
+        return '';
+    }
 }

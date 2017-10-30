@@ -13,26 +13,21 @@
  * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   Adabra
- * @package    Adabra_Tracking
+ * @package    Adabra_Feed
  * @copyright  Copyright (c) 2017 Skeeller srl / MageSpecialist (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Adabra_Tracking_Block_Search extends Adabra_Tracking_Block_Template
+class Adabra_Feed_Model_Source_Vfield_Type extends Adabra_Feed_Model_Source_Abstract
 {
-    /**
-     * Get query string
-     * @return string
-     */
-    public function getKw()
-    {
-        return Mage::helper('catalogsearch')->getQuery()->getQueryText();
-    }
+    const TYPE_CUSTOMER = 'customer';
+    const TYPE_PRODUCT = 'product';
 
-    public function getTrackingProperties()
+    public function toOptionArray()
     {
         return array(
-            array('key' => 'trkProductLocalSearch', 'value' => $this->getKw()),
+            array('value' => self::TYPE_CUSTOMER, 'label' => 'Customer attribute'),
+            array('value' => self::TYPE_PRODUCT, 'label' => 'Product attribute'),
         );
     }
 }

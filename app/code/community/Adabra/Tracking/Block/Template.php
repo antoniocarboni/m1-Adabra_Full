@@ -18,21 +18,43 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Adabra_Tracking_Block_Search extends Adabra_Tracking_Block_Template
+class Adabra_Tracking_Block_Template extends Mage_Core_Block_Template
 {
     /**
-     * Get query string
-     * @return string
+     * Return true if module can be shown
+     * @return bool
      */
-    public function getKw()
+    public function canShow()
     {
-        return Mage::helper('catalogsearch')->getQuery()->getQueryText();
+        return Mage::helper('adabra_tracking')->getEnabled();
     }
 
-    public function getTrackingProperties()
+    /**
+     * Get payload
+     * @param $key
+     * @param $values
+     * @return array
+     */
+    public function getPayload($key, $values)
     {
-        return array(
-            array('key' => 'trkProductLocalSearch', 'value' => $this->getKw()),
-        );
+        if (!is_array($values)) {
+            $values = array($values);
+        }
+
+        $res = array($key);
+        foreach ($values as $value) {
+            $res[] = $value;
+        }
+
+        return $res;
+    }
+
+    /**
+     * Get adabra tracking host
+     * @return string
+     */
+    public function getAdabraTrackingHost()
+    {
+        return Mage::helper('adabra_tracking')->getAdabraTrackingHost();
     }
 }

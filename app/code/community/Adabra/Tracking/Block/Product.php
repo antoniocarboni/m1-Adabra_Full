@@ -18,7 +18,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Adabra_Tracking_Block_Product extends Adabra_Tracking_Block_Abstract
+class Adabra_Tracking_Block_Product extends Adabra_Tracking_Block_Template
 {
     /**
      * Get current category
@@ -96,14 +96,8 @@ class Adabra_Tracking_Block_Product extends Adabra_Tracking_Block_Abstract
         $value[] = $brand;
 
         $res = array(
-            array(
-                'key' => 'trkProductView',
-                'value' => $value,
-            ),
-            array(
-                'key' => 'setCtxParamBrands',
-                'value' => $brand,
-            )
+            array('key' => 'trkProductView', 'value' => $value),
+            array('key' => 'setCtxParamBrands', 'value' => $brand)
         );
 
         $productTags = $this->_getCustomTagsList($this->getProduct());

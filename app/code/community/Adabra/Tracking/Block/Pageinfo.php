@@ -18,7 +18,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Adabra_Tracking_Block_Base extends Adabra_Tracking_Block_Abstract
+class Adabra_Tracking_Block_Pageinfo extends Adabra_Tracking_Block_Template
 {
     /**
      * Get document's title
@@ -31,20 +31,6 @@ class Adabra_Tracking_Block_Base extends Adabra_Tracking_Block_Abstract
         }
 
         return '-';
-    }
-
-    /**
-     * Get user ID
-     * @return int
-     */
-    public function getSiteUserId()
-    {
-        $helperCustomer = Mage::helper('customer');
-        if ($helperCustomer->isLoggedIn()) {
-            return $helperCustomer->getCustomer()->getId();
-        }
-
-        return 0;
     }
 
     /**
@@ -75,15 +61,6 @@ class Adabra_Tracking_Block_Base extends Adabra_Tracking_Block_Abstract
     }
 
     /**
-     * Get adabra tracking host
-     * @return string
-     */
-    public function getAdabraTrackingHost()
-    {
-        return Mage::helper('adabra_tracking')->getAdabraTrackingHost();
-    }
-
-    /**
      * Get tracking properties
      * @return array
      */
@@ -96,8 +73,6 @@ class Adabra_Tracking_Block_Base extends Adabra_Tracking_Block_Abstract
             array('key' => 'setLanguage', 'value' => $this->getLanguage()),
             array('key' => 'setSiteId', 'value' => $this->getSiteId()),
             array('key' => 'setCatalogId', 'value' => $this->getCatalogId()),
-            array('key' => 'setSiteUserId', 'value' => $this->getSiteUserId()),
-
             array('key' => 'setPageType', 'value' => $pageType),
         );
 
