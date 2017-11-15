@@ -106,13 +106,20 @@ class Adabra_Tracking_Model_Observer
         foreach ($orderItems as $orderItem) {
             $isFirstRow = ($rowsCount == 0);
 
-            $price = $this->_toCurrency($orderItem->getPrice() - $orderItem->getDiscountAmount(), true);
-            $priceInclTax = $this->_toCurrency($orderItem->getPriceInclTax() - $orderItem->getDiscountAmount(), true);
+            $singleItemDiscount = 0;
+
+            if($orderItem->getQtyOrdered()>0) {
+                $singleItemDiscount = $orderItem->getDiscountAmount() / $orderItem->getQtyOrdered();
+            }
+
+            $price = $this->_toCurrency($orderItem->getPrice() - $singleItemDiscount, true);
+            $priceInclTax = $this->_toCurrency($orderItem->getPriceInclTax() - $singleItemDiscount, true);
 
             $productSku = $orderItem->getProduct()->getData('sku');
             if (Mage::helper('adabra_tracking')->isBlacklistedSku($productSku)) {
                 continue;
             }
+
 
             $couponCode = $order->getCouponCode();
             if (is_null($couponCode)) {

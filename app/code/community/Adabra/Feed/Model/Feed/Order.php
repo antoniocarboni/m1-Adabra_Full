@@ -99,8 +99,15 @@ class Adabra_Feed_Model_Feed_Order extends Adabra_Feed_Model_Feed_Abstract
         foreach ($orderItems as $orderItem) {
             $isFirstRow = ($rowsCount == 0);
 
-            $price = $this->_toCurrency($orderItem->getPrice() - $orderItem->getDiscountAmount(), true);
-            $priceInclTax = $this->_toCurrency($orderItem->getPriceInclTax() - $orderItem->getDiscountAmount(), true);
+            $singleItemDiscount = 0;
+
+            if($orderItem->getQtyOrdered()>0) {
+                $singleItemDiscount = $orderItem->getDiscountAmount() / $orderItem->getQtyOrdered();
+            }
+
+
+            $price = $this->_toCurrency($orderItem->getPrice() - $singleItemDiscount, true);
+            $priceInclTax = $this->_toCurrency($orderItem->getPriceInclTax() - $singleItemDiscount, true);
 
             $cpId = 0;
             $buyRequest = $orderItem->getProductOptionByCode('info_buyRequest');
