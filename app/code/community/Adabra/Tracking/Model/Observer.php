@@ -103,17 +103,27 @@ class Adabra_Tracking_Model_Observer
 
         $orderItems = $order->getAllVisibleItems();
 
+
+
         foreach ($orderItems as $orderItem) {
+
             $isFirstRow = ($rowsCount == 0);
 
-            $singleItemDiscount = 0;
+            // Discount
+            $discount = abs($orderItem->getDiscountAmount());
+            $taxAmount= $orderItem->getTaxAmount();
+            $hiddenTaxAmount = $orderItem->getHiddenTaxAmount();
 
             if($orderItem->getQtyOrdered()>0) {
-                $singleItemDiscount = $orderItem->getDiscountAmount() / $orderItem->getQtyOrdered();
+                $discount = $discount / $orderItem->getQtyOrdered();
+                $taxAmount = $orderItem->getTaxAmount() / $orderItem->getQtyOrdered();
+                $hiddenTaxAmount = $orderItem->getHiddenTaxAmount() / $orderItem->getQtyOrdered();
             }
 
-            $price = $this->_toCurrency($orderItem->getPrice() - $singleItemDiscount, true);
-            $priceInclTax = $this->_toCurrency($orderItem->getPriceInclTax() - $singleItemDiscount, true);
+            if ($discount > 0) {
+                $price = $this->_toCurrency($orderItem->getPrice() - $discount, true);
+                $priceInclTax = $this->_toCurrency($price + $taxAmount + $hiddenTaxAmount, true);
+            }
 
             $productSku = $orderItem->getProduct()->getData('sku');
             if (Mage::helper('adabra_tracking')->isBlacklistedSku($productSku)) {
