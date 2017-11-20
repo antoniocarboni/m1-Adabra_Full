@@ -120,10 +120,9 @@ class Adabra_Tracking_Model_Observer
                 $hiddenTaxAmount = $orderItem->getHiddenTaxAmount() / $orderItem->getQtyOrdered();
             }
 
-            if ($discount > 0) {
-                $price = $this->_toCurrency($orderItem->getPrice() - $discount, true);
-                $priceInclTax = $this->_toCurrency($price + $taxAmount + $hiddenTaxAmount, true);
-            }
+            $price = $this->_toCurrency($orderItem->getPrice() - $discount, true);
+            $priceInclTax = $this->_toCurrency($price + $taxAmount + $hiddenTaxAmount, true);
+
 
             $productSku = $orderItem->getProduct()->getData('sku');
             if (Mage::helper('adabra_tracking')->isBlacklistedSku($productSku)) {
