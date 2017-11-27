@@ -115,6 +115,7 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
             'correlati',
             'tags',
             'categorie',
+            'categorie_id',
         );
     }
 
@@ -334,6 +335,7 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
             implode('|', $relatedSkus),
             '',
             implode('|', $categories),
+            implode('|', $categoryIds),
         ));
     }
 
