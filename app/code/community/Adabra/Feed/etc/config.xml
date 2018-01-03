@@ -116,6 +116,7 @@
                 <image_type>image</image_type>
                 <image_size>300</image_size>
                 <compress>0</compress>
+                <catalog_price_rules>1</catalog_price_rules>
             </general>
             <http>
                 <enabled>0</enabled>

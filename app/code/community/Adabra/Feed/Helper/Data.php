@@ -28,6 +28,7 @@ class Adabra_Feed_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_PATH_GENERAL_IMAGE_TYPE = 'adabra_feed/general/image_type';
     const XML_PATH_GENERAL_IMAGE_SIZE = 'adabra_feed/general/image_size';
     const XML_PATH_GENERAL_REBUILD_TIME = 'adabra_feed/general/rebuild_time';
+    const XML_PATH_GENERAL_CATALOG_PRICE_RULES = 'adabra_feed/general/catalog_price_rules';
 
     const XML_PATH_HTTP_ENABLED = 'adabra_feed/http/enabled';
     const XML_PATH_HTTP_USER = 'adabra_feed/http/user';
@@ -108,6 +109,15 @@ class Adabra_Feed_Helper_Data extends Mage_Core_Helper_Abstract
     public function isCronEnabled()
     {
         return (bool) Mage::getStoreConfig(self::XML_PATH_GENERAL_CRON);
+    }
+
+    /**
+     * Return true if use catalog price rules mode is enabled
+     * @return bool
+     */
+    public function isUseCatalogPriceRules()
+    {
+        return (bool) Mage::getStoreConfig(self::XML_PATH_GENERAL_CATALOG_PRICE_RULES);
     }
 
     /**

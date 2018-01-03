@@ -288,10 +288,16 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
         }
 
         $price = $product->getPrice();
-        $finalPrice = Mage::getSingleton('catalogrule/rule')->calcProductPriceRule($product, $product->getFinalPrice());
-        if ($finalPrice == 0) {
+        $useCatalogPriceRules = Mage::helper('adabra_feed')->isUseCatalogPriceRules();
+        if($useCatalogPriceRules) {
+            $finalPrice = Mage::getSingleton('catalogrule/rule')->calcProductPriceRule($product, $product->getFinalPrice());
+            if ($finalPrice == 0) {
+                $finalPrice = $product->getFinalPrice();
+            }
+        } else {
             $finalPrice = $product->getFinalPrice();
         }
+
 
         // Find first category
         $mainCategoryId = Mage::helper('adabra_feed')->getFirstValidCategory($categoryIds, $this->getStoreId());
