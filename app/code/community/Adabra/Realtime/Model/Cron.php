@@ -13,31 +13,18 @@
  * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   Adabra
- * @package    Adabra_Tracking
+ * @package    Adabra_Feed
  * @copyright  Copyright (c) 2017 Skeeller srl / MageSpecialist (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-class Adabra_Realtime_Helper_Data extends Mage_Core_Helper_Abstract
+class Adabra_Realtime_Model_Cron
 {
-    const XML_PATH_GENERAL_ENABLED = 'adabra_realtime/general/enabled';
-    const XML_PATH_GENERAL_CRON = 'adabra_realtime/general/use_cron';
-
-    /**
-     * Return true if this plugin is enabled
-     * @return bool
-     */
-    public function getEnabled()
+    public function processQueue($event)
     {
-        return (bool) Mage::getStoreConfig(self::XML_PATH_GENERAL_ENABLED);
-    }
-
-    /**
-     * Return true if cron mode is enabled
-     * @return bool
-     */
-    public function isCronEnabled()
-    {
-        return (bool) Mage::getStoreConfig(self::XML_PATH_GENERAL_CRON);
+        if (Mage::helper('adabra_realtime')->isCronEnabled()) {
+            Mage::getSingleton('adabra_realtime/queue')->processQueue();
+        }
     }
 }
+

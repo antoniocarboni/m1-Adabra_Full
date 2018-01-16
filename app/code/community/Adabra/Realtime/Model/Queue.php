@@ -26,4 +26,15 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
     {
         $this->_init('adabra_realtime/queue');
     }
+
+    public function processQueue()
+    {
+        $model = Mage::getModel('adabra_realtime/queue')
+            ->getCollection();
+        $row = $model->getFirstItem();
+
+        $productSku = $row->getProductSku();
+
+        $row->delete();
+    }
 }

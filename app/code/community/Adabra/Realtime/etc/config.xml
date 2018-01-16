@@ -67,10 +67,25 @@
             </catalog_product_save_after>
         </events>
     </global>
+
+    <crontab>
+        <jobs>
+            <adabra_realtime_process_queue>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>adabra_realtime/cron::processQueue</model>
+                </run>
+            </adabra_realtime_process_queue>
+        </jobs>
+    </crontab>
+
     <default>
         <adabra_realtime>
             <general>
                 <enabled>0</enabled>
+                <use_cron>1</use_cron>
             </general>
         </adabra_realtime>
     </default>

@@ -22,11 +22,12 @@ class Adabra_Realtime_Model_Observer
 {
     public function catalogProductSaveAfter($observer)
     {
-        $product = $observer->getEvent()->getProduct();
-//        Mage::getSingleton('adabra_realtime/queue')->addProduct($product);
+        if (Mage::helper('adabra_realtime')->getEnabled()) {
+            $product = $observer->getEvent()->getProduct();
 
-        $adabraQueue = Mage::getSingleton('adabra_realtime/queue');
-        $adabraQueue->setProductSku($product->getSku());
-        $adabraQueue->save();
+            $adabraQueue = Mage::getSingleton('adabra_realtime/queue');
+            $adabraQueue->setProductSku($product->getSku());
+            $adabraQueue->save();
+        }
     }
 }
