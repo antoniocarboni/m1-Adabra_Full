@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Adabra_Realtime>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Adabra_Common/>
+            </depends>
+        </Adabra_Realtime>
+    </modules>
+</config>
