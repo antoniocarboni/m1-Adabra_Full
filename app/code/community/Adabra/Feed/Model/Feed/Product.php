@@ -287,10 +287,17 @@ class Adabra_Feed_Model_Feed_Product extends Adabra_Feed_Model_Feed_Abstract
             }
         }
 
-        $price = $product->getPrice();
-        $finalPrice = Mage::getSingleton('catalogrule/rule')->calcProductPriceRule($product, $product->getFinalPrice());
-        if ($finalPrice == 0) {
-            $finalPrice = $product->getFinalPrice();
+        $_taxHelper  = Mage::helper('tax');
+        $priceIncTax = $_taxHelper->getPrice($product, $product->getPrice(), true);
+        $price = $priceIncTax;
+
+        $finalPriceIncTax = $_taxHelper->getPrice($product, $product->getFinalPrice());
+        $cataloPriceRule = Mage::getSingleton('catalogrule/rule')->calcProductPriceRule($product, $finalPriceIncTax);
+
+        if($cataloPriceRule == null || $cataloPriceRule == 0 ) {
+            $finalPrice = $finalPriceIncTax;
+        } else {
+            $finalPrice = $cataloPriceRule;
         }
 
         // Find first category
