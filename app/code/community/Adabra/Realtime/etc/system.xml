@@ -51,7 +51,7 @@
                             <label>Use Magento Cron</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>10</sort_order>
+                            <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -60,6 +60,42 @@
                                 using the scripts from "shell" path.
                             </comment>
                         </use_cron>
+                        <api_key translate="label,comment">
+                            <label>API Key</label>
+                            <comment>Provided by Adabra</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_key>
+                        <api_secret translate="label,comment">
+                            <label>Api Secret</label>
+                            <comment>Provided by Adabra</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_secret>
+                        <company_id translate="label,comment">
+                            <label>Company Id</label>
+                            <comment>Provided by Adabra</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </company_id>
+                        <catalog_id translate="label,comment">
+                            <label>Catalog Id</label>
+                            <comment>Provided by Adabra</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </catalog_id>
                     </fields>
                 </general>
             </groups>

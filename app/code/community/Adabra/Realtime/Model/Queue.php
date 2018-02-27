@@ -29,12 +29,30 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
 
     public function processQueue()
     {
-        $model = Mage::getModel('adabra_realtime/queue')
-            ->getCollection();
-        $row = $model->getFirstItem();
 
-        $productSku = $row->getProductSku();
+        $model = $this->getCollection();
 
-        $row->delete();
+        $productsSku = $model->getColumnValues('product_sku');
+
+        /** @var Mage_Catalog_Model_Resource_Product_Collection $productCollection */
+        $productCollection = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('status', array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED))
+            ->addFieldToFilter('sku', array('in' => $productsSku))
+            ->load();
+
+        /** @var Adabra_Realtime_Model_Api_Product_All $api */
+        $api = Mage::getModel('adabra_realtime/api_product_all');
+
+        try {
+            $jsonData = $api->send($productCollection);
+            $data = json_decode($jsonData);
+        }
+        catch (\Exception $e) {
+            $data = '';
+        }
+
+//        $row->delete();
     }
 }
