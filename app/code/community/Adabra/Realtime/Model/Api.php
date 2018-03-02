@@ -86,4 +86,20 @@ abstract class Adabra_Realtime_Model_Api {
     {
         return $val ? 'true' : 'false';
     }
+
+    /**
+     * Convert value to currency
+     * @param $val
+     * @param $currencyConvert
+     * @return string
+     */
+    protected function _toCurrency($val, $currencyConvert = false)
+    {
+        if ($currencyConvert) {
+            $baseCurrency = $this->getStore()->getBaseCurrencyCode();
+            $val = Mage::helper('directory')->currencyConvert($val, $baseCurrency, $this->getFeed()->getCurrency());
+        }
+
+        return number_format($val, 4, '.', '');
+    }
 }

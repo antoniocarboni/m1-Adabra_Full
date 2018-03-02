@@ -97,6 +97,7 @@ class Adabra_Feed_Adminhtml_Adabra_FeedController extends Mage_Adminhtml_Control
                     ->setStoreId($this->getRequest()->getPost('store_id'))
                     ->setEnabled($this->getRequest()->getPost('enabled'))
                     ->setCurrency($this->getRequest()->getPost('currency'))
+                    ->setAdabraCatalogId($this->getRequest()->getPost('adabra_catalog_id'))
                     ->save();
 
                 if (!$feedId) {

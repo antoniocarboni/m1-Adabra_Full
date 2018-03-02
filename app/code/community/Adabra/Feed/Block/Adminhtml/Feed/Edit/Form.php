@@ -44,6 +44,11 @@ class Adabra_Feed_Block_Adminhtml_Feed_Edit_Form extends Mage_Adminhtml_Block_Wi
             'class'     => 'required-entry',
             'values'    => Mage::getSingleton('adabra_feed/source_store')->toOptionArray(),
         ));
+        $fieldset->addField('adabra_catalog_id', 'text', array(
+            'label'     => Mage::helper('adabra_feed')->__('Catalog Id'),
+            'name'      => 'adabra_catalog_id',
+            'class'     => 'required-entry',
+        ));
         $fieldset->addField('currency', 'select', array(
             'label'     => Mage::helper('adabra_feed')->__('Currency'),
             'name'      => 'currency',

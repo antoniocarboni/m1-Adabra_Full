@@ -94,6 +94,12 @@ class Adabra_Feed_Block_Adminhtml_Feed_Grid extends Mage_Adminhtml_Block_Widget_
             'frame_callback' => array($this, 'decorateStore'),
         ));
 
+        $this->addColumn('adabra_catalog_id', array(
+            'header' => Mage::helper('adabra_feed')->__('Catalog ID'),
+            'index' => 'adabra_catalog_id',
+            'type' => 'text',
+        ));
+
         $this->addColumn('enabled', array(
             'header' => Mage::helper('adabra_feed')->__('Enabled'),
             'align' => 'left',

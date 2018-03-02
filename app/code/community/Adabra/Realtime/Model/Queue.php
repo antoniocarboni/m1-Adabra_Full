@@ -34,24 +34,42 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
 
         $productsSku = $model->getColumnValues('product_sku');
 
-        /** @var Mage_Catalog_Model_Resource_Product_Collection $productCollection */
-        $productCollection = Mage::getModel('catalog/product')
-            ->getCollection()
-            ->addAttributeToSelect('*')
-            ->addAttributeToFilter('status', array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED))
-            ->addFieldToFilter('sku', array('in' => $productsSku))
-            ->load();
+        if (count($productsSku) > 0) {
+            /** @var Adabra_Realtime_Model_Api_Product_Update $api */
+            $api = Mage::getSingleton('adabra_realtime/api_product_update');
 
-        /** @var Adabra_Realtime_Model_Api_Product_All $api */
-        $api = Mage::getModel('adabra_realtime/api_product_all');
+            /** @var Adabra_Feed_Model_Resource_Feed_Collection $feeds */
+            $feeds = Mage::getModel('adabra_feed/feed')
+                ->getCollection()
+                ->addFieldToFilter('enabled', '1');
 
-        try {
-            $jsonData = $api->send($productCollection);
-            $data = json_decode($jsonData);
+            /** @var Adabra_Feed_Model_Feed $feed */
+            foreach ($feeds as $feed) {
+
+                /** @var Mage_Catalog_Model_Resource_Product_Collection $productCollection */
+                $productCollection = Mage::getModel('catalog/product')->getCollection();
+
+                $productCollection
+                    ->setStoreId($feed->getStoreId())
+                    ->addStoreFilter()
+                    ->addAttributeToSelect('*')
+                    ->addWebsiteFilter($feed->getStore()->getWebsiteId())
+                    ->addUrlRewrite()
+                    ->addCategoryIds()
+                    ->addAttributeToFilter('status', array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED))
+                    ->addFieldToFilter('sku', array('in' => $productsSku))
+                    ->load();
+
+                try {
+                    $jsonData = $api->send($productCollection, $feed);
+                    $data = json_decode($jsonData);
+                } catch (\Exception $e) {
+                    $data = '';
+                }
+            }
+
         }
-        catch (\Exception $e) {
-            $data = '';
-        }
+
 
 //        $row->delete();
     }
