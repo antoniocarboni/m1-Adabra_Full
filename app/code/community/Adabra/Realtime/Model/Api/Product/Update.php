@@ -20,6 +20,8 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
 {
     const ENDPOINT = 'https://staging.marketingspray.com/api/v1/catalog/product/add';
 
+    protected $_virtualFields = array();
+
     protected $_feed;
 
     /**
@@ -108,8 +110,25 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
             }
         }
 
+        // Must use this method due to 1.7 images on collection issue
+        $imageType = Mage::helper('adabra_feed')->getImageType();
+        $productImage = Mage::getResourceSingleton('catalog/product')
+            ->getAttributeRawValue($product->getId(), $imageType, $this->getFeed()->getStoreId());
+
+        if ($productImage && ($productImage != 'no_selection')) {
+            $imageSize = Mage::helper('adabra_feed')->getImageSize();
+            if ($imageSize) {
+                $imageUrl = Mage::helper('catalog/image')->init($product, $imageType)->resize($imageSize);
+            } else {
+                $imageUrl = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($productImage);
+            }
+        } else {
+            $imageUrl = '';
+        }
+
         // Find first category
-        $mainCategoryId = Mage::helper('adabra_feed')->getFirstValidCategory($categoryIds, $this->getFeed()->getStore()->getStoreId());
+//        $mainCategoryId = Mage::helper('adabra_feed')->getFirstValidCategory($categoryIds, $this->getFeed()->getStore()->getStoreId());
+        $mainCategoryId = 18;
 
         $productArray = array(
             'idProdotto' => $product->getSku(),
@@ -118,17 +137,17 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
             'linkNegozio' => $productUrl,
             'nome' => $product->getName(),
             'descrizioneBreve' => $product->getDescription(),
-            'prezzoSpedizione' => '',  // TODO: virtual_field
+            'prezzoSpedizione' => $this->getVirtualField($product, 'prezzo_spedizione'),
             'prezzoBase' => $this->_toCurrency($price, true),
             'prezzoFinale' => $this->_toCurrency($finalPrice, true),
-            'valuta' =>'EU', // TODO: prendere il dato dallo store
+            'valuta' => $this->getFeed()->getCurrency(),
             'fSpedizione' => $this->_toBoolean($shippable),
-            'tempoSpedizione' => 5, // TODO: virtual_field
-            'immagine' => '', // TODO: prendere il dato dallo store
+            'tempoSpedizione' => $this->getVirtualField($product, 'tempo_spedizione'),
+            'immagine' => $imageUrl,
             'disponibilita' => $availability,
             'quantitaDisponibile' => floatval($qty),
-            'condizione' => 0, // TODO: virtual_field
-            'fPerAdulti' => false, // TODO: virtual_field
+            'condizione' => intval($this->getVirtualField($product, 'condizione')),
+            'fPerAdulti' => $this->_toBoolean($this->getVirtualField($product, 'f_peradulti')),
             'fAttivo' => $this->_toBoolean($isVisible),
             'upSert' => true
         );
@@ -175,5 +194,35 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
         }
 
         return number_format($val, 4, '.', '');
+    }
+
+    /**
+     * Get virtual field
+     * @param Mage_Catalog_Model_Product $product
+     * @param $fieldName
+     * @return string
+     */
+    public function getVirtualField(Mage_Catalog_Model_Product $product, $fieldName)
+    {
+        $fieldModel = $this->_getVirtualFieldModel($fieldName);
+        return $fieldModel->getComputedValue($product);
+    }
+
+    /**
+     * Get virtual field model
+     * @param $fieldName
+     * @return Adabra_Feed_Model_Source_Vfield
+     */
+    protected function _getVirtualFieldModel($fieldName)
+    {
+        if (!isset($this->_virtualFields[$fieldName])) {
+            $this->_virtualFields[$fieldName] = Mage::getModel('adabra_feed/vfield')
+                ->getCollection()
+                ->addFieldToFilter('vfield_type', ['eq' => Adabra_Feed_Model_Source_Vfield_Type::TYPE_PRODUCT])
+                ->addFieldToFilter('code', ['eq' => $fieldName])
+                ->getFirstItem();
+        }
+
+        return $this->_virtualFields[$fieldName];
     }
 }
