@@ -132,7 +132,6 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
 
         $productArray = array(
             'idProdotto' => $product->getSku(),
-            'idCatalogo' => $this->getFeed()->getAdabraCatalogId(),
             'idCategoriaPrincipale' => $mainCategoryId,
             'linkNegozio' => $productUrl,
             'nome' => $product->getName(),
@@ -174,6 +173,7 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
         $payload = array(
             'apiKey'    => $this->_getHelper()->getApiKey(),
             'apiSecret' => $this->_getHelper()->getApiSecret(),
+            'idCatalogo' => $this->getFeed()->getAdabraCatalogId(),
             'bulk'      => $productsList
         );
 

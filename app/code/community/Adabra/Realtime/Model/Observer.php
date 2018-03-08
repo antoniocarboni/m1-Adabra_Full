@@ -26,7 +26,8 @@ class Adabra_Realtime_Model_Observer
             $product = $observer->getEvent()->getProduct();
 
             $adabraQueue = Mage::getSingleton('adabra_realtime/queue');
-            $adabraQueue->setProductSku($product->getSku());
+            $adabraQueue->setQueueCode($product->getSku());
+            $adabraQueue->setQueueType(Adabra_Realtime_Model_Queue::TYPE_PRODUCT);
             $adabraQueue->save();
         }
     }

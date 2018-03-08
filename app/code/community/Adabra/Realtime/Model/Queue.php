@@ -20,6 +20,12 @@
 
 class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
 {
+
+    const TYPE_PRODUCT = 'product';
+    const TYPE_CATEGORY = 'category';
+
+    const STATUS_CODE_SUCCESS = 'ENJOY_THE_EXPERIENCE';
+
     protected $_store = null;
 
     protected function _construct()
@@ -27,12 +33,28 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
         $this->_init('adabra_realtime/queue');
     }
 
+    private function _allFeedExported($resultArray) {
+        if(!count($resultArray)) {
+            return false;
+        }
+
+        foreach ($resultArray as $value) {
+            if($value !== true) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function processQueue()
     {
 
-        $model = $this->getCollection();
+        $queueCollection = $this->getCollection()
+            ->addFieldToFilter('queue_type', array('eq' => Adabra_Realtime_Model_Queue::TYPE_PRODUCT))
+            ->addFieldToFilter('updated_at', array('null' => true));
 
-        $productsSku = $model->getColumnValues('product_sku');
+        $productsSku = $queueCollection->getColumnValues('queue_code');
 
         if (count($productsSku) > 0) {
             /** @var Adabra_Realtime_Model_Api_Product_Update $api */
@@ -43,9 +65,11 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
                 ->getCollection()
                 ->addFieldToFilter('enabled', '1');
 
+            $allFeedsExported = array();
+
             /** @var Adabra_Feed_Model_Feed $feed */
             foreach ($feeds as $feed) {
-
+                $allFeedsExportedStatus[$feed->getStoreId()] = false;
                 /** @var Mage_Catalog_Model_Resource_Product_Collection $productCollection */
                 $productCollection = Mage::getModel('catalog/product')->getCollection();
 
@@ -63,14 +87,21 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
                 try {
                     $jsonData = $api->send($productCollection, $feed);
                     $data = json_decode($jsonData);
+                    if ($data->returnStatusCode === self::STATUS_CODE_SUCCESS) {
+                        $allFeedsExportedStatus[$feed->getStoreId()] = true;
+                    }
                 } catch (\Exception $e) {
-                    $data = '';
+                    Mage::log("Adabra_Realtime: Error product api call - " . $e->getMessage());
                 }
             }
 
+            if($this->_allFeedExported($allFeedsExportedStatus)) {
+                foreach ($queueCollection as $item) {
+                    $item->delete();
+                }
+            }
+
+
         }
-
-
-//        $row->delete();
     }
 }

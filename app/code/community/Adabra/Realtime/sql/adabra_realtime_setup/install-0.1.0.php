@@ -33,9 +33,15 @@ $table
         'unsigned' => true,
         'nullable' => false,
         'primary' => true), 'Id')
-    ->addColumn('product_sku', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+    ->addColumn('queue_code', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
         'nullable' => false,
-    ), 'Product Sku')
+    ), 'Queue Code')
+    ->addColumn('queue_type', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+        'nullable' => false,
+    ), 'Queue Type')
+    ->addColumn('updated_at', Varien_Db_Ddl_Table::TYPE_DATETIME, null, array(
+        'nullable' => true,
+    ), 'Updated at')
 
     ->setOption('type', 'Innodb')
     ->setComment('Adabra Realtime queue');
