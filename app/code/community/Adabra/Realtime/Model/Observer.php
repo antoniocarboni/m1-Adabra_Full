@@ -31,4 +31,16 @@ class Adabra_Realtime_Model_Observer
             $adabraQueue->save();
         }
     }
+
+    public function catalogCategorySaveAfter($observer)
+    {
+        if (Mage::helper('adabra_realtime')->getEnabled()) {
+            $category = $observer->getEvent()->getCategory();
+
+            $adabraQueue = Mage::getSingleton('adabra_realtime/queue');
+            $adabraQueue->setQueueCode($category->getId());
+            $adabraQueue->setQueueType(Adabra_Realtime_Model_Queue::TYPE_CATEGORY);
+            $adabraQueue->save();
+        }
+    }
 }

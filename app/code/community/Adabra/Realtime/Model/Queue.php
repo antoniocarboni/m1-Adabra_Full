@@ -25,6 +25,8 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
     const TYPE_CATEGORY = 'category';
 
     const STATUS_CODE_SUCCESS = 'ENJOY_THE_EXPERIENCE';
+    
+    const PAGE_SIZE_LIMIT = 150;
 
     protected $_store = null;
 
@@ -47,15 +49,53 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
         return true;
     }
 
-    public function processQueue()
+    public function processCategoryQueue($categoryIds)
     {
+        if (count($categoryIds) > 0) {
+            /** @var Adabra_Realtime_Model_Api_Category_Update $api */
+            $api = Mage::getSingleton('adabra_realtime/api_category_update');
 
-        $queueCollection = $this->getCollection()
-            ->addFieldToFilter('queue_type', array('eq' => Adabra_Realtime_Model_Queue::TYPE_PRODUCT))
-            ->addFieldToFilter('updated_at', array('null' => true));
+            /** @var Adabra_Feed_Model_Resource_Feed_Collection $feeds */
+            $feeds = Mage::getModel('adabra_feed/feed')
+                ->getCollection()
+                ->addFieldToFilter('enabled', '1');
 
-        $productsSku = $queueCollection->getColumnValues('queue_code');
+            $allFeedsExported = array();
 
+            /** @var Adabra_Feed_Model_Feed $feed */
+            foreach ($feeds as $feed) {
+                $allFeedsExportedStatus[$feed->getStoreId()] = false;
+
+                /** @var Mage_Catalog_Model_Resource_Category_Collection $categoryCollection */
+                $categoryCollection = Mage::getModel('catalog/category')->getCollection();
+
+                $categoryCollection
+                    ->addAttributeToSelect('*')
+                    ->addUrlRewriteToResult()
+                    ->addFieldToFilter('entity_id', array('in' => $categoryIds))
+                    ->setStoreId($feed->getStoreId());
+
+                try {
+                    $jsonData = $api->send($categoryCollection, $feed);
+                    $data = json_decode($jsonData);
+                    if ($data->returnStatusCode === self::STATUS_CODE_SUCCESS) {
+                        $allFeedsExportedStatus[$feed->getStoreId()] = true;
+                    }
+                } catch (\Exception $e) {
+                    Mage::log("Adabra_Realtime: Error product api call - " . $e->getMessage());
+                }
+            }
+
+            if($this->_allFeedExported($allFeedsExportedStatus)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function processProductQueue($productsSku)
+    {
         if (count($productsSku) > 0) {
             /** @var Adabra_Realtime_Model_Api_Product_Update $api */
             $api = Mage::getSingleton('adabra_realtime/api_product_update');
@@ -70,6 +110,7 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
             /** @var Adabra_Feed_Model_Feed $feed */
             foreach ($feeds as $feed) {
                 $allFeedsExportedStatus[$feed->getStoreId()] = false;
+                
                 /** @var Mage_Catalog_Model_Resource_Product_Collection $productCollection */
                 $productCollection = Mage::getModel('catalog/product')->getCollection();
 
@@ -96,12 +137,67 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
             }
 
             if($this->_allFeedExported($allFeedsExportedStatus)) {
-                foreach ($queueCollection as $item) {
-                    $item->delete();
-                }
+                return true;
+            } else {
+                return false;
             }
 
 
         }
+    }
+
+    public function getQueueList($type)
+    {
+        return $this->getCollection()
+            ->addFieldToFilter('queue_type', array('eq' => $type))
+            ->setPageSize(self::PAGE_SIZE_LIMIT);
+    }
+
+    public function processQueue($type)
+    {
+        $fsHelper = Mage::helper('adabra_feed/filesystem');
+
+        if (!$fsHelper->acquireLock('queue')) {
+            return $this;
+        }
+        //process Categories 150 pagination
+        $pageNumber = 1;
+        $collection = $this->getQueueList($type);
+
+        $pages = $collection->getLastPageNumber();
+
+        do {
+            $collection->setCurPage($pageNumber);
+            $collection->load();
+
+            //process Products
+            $elementList = $collection->getColumnValues('queue_code');
+            $deleteItems = false;
+            
+            switch ($type) {
+                case self::TYPE_PRODUCT:
+                    $deleteItems = $this->processProductQueue($elementList);
+                    break;
+                case self::TYPE_CATEGORY:
+                    $deleteItems = $this->processCategoryQueue($elementList);
+                    break;
+            }
+            
+            if($deleteItems) {
+                foreach ($collection as $item) {
+                    $item->delete();
+                }
+            }
+
+            $pageNumber++;
+
+            $collection->clear();
+            $collection = $this->getQueueList($type);
+        } while ($pageNumber < $pages);
+
+        $fsHelper->releaseLock('queue');
+
+        return $this;
+        
     }
 }

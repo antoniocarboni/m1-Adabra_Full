@@ -9,7 +9,8 @@ class Adabra_Shell_ProcessQueue extends Mage_Shell_Abstract
     {
         /** @var Adabra_Realtime_Model_Queue $queue */
         $queue = Mage::getSingleton('adabra_realtime/queue');
-        $queue->processQueue();
+        $queue->processQueue(Adabra_Realtime_Model_Queue::TYPE_CATEGORY);
+        $queue->processQueue(Adabra_Realtime_Model_Queue::TYPE_PRODUCT);
     }
 }
 

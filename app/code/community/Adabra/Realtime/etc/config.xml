@@ -65,6 +65,15 @@
                     </adabra_realtime>
                 </observers>
             </catalog_product_save_after>
+            <catalog_category_save_after>
+                <observers>
+                    <adabra_realtime>
+                        <type>singleton</type>
+                        <class>adabra_realtime/observer</class>
+                        <method>catalogCategorySaveAfter</method>
+                    </adabra_realtime>
+                </observers>
+            </catalog_category_save_after>
         </events>
     </global>
 
