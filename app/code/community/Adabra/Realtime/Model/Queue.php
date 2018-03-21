@@ -58,7 +58,9 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
             /** @var Adabra_Feed_Model_Resource_Feed_Collection $feeds */
             $feeds = Mage::getModel('adabra_feed/feed')
                 ->getCollection()
-                ->addFieldToFilter('enabled', '1');
+                ->addFieldToFilter('enabled', '1')
+                ->addFieldToFilter('adabra_catalog_id', array('neq' => 0));
+
 
             $allFeedsExported = array();
 
@@ -97,13 +99,15 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
     public function processProductQueue($productsSku)
     {
         if (count($productsSku) > 0) {
+            $allFeedsExportedStatus = array();
             /** @var Adabra_Realtime_Model_Api_Product_Update $api */
             $api = Mage::getSingleton('adabra_realtime/api_product_update');
 
             /** @var Adabra_Feed_Model_Resource_Feed_Collection $feeds */
             $feeds = Mage::getModel('adabra_feed/feed')
                 ->getCollection()
-                ->addFieldToFilter('enabled', '1');
+                ->addFieldToFilter('enabled', '1')
+                ->addFieldToFilter('adabra_catalog_id', array('neq' => 0));;
 
             $allFeedsExported = array();
 
@@ -118,22 +122,34 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
                     ->setStoreId($feed->getStoreId())
                     ->addStoreFilter()
                     ->addAttributeToSelect('*')
-                    ->addWebsiteFilter($feed->getStore()->getWebsiteId())
-                    ->addUrlRewrite()
-                    ->addCategoryIds()
                     ->addAttributeToFilter('status', array('eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED))
                     ->addFieldToFilter('sku', array('in' => $productsSku))
-                    ->load();
+                    ->addWebsiteFilter($feed->getStore()->getWebsiteId())
+                    ->addUrlRewrite()
+                    ->addCategoryIds();
 
-                try {
-                    $jsonData = $api->send($productCollection, $feed);
-                    $data = json_decode($jsonData);
-                    if ($data->returnStatusCode === self::STATUS_CODE_SUCCESS) {
-                        $allFeedsExportedStatus[$feed->getStoreId()] = true;
+                // Add stock information
+                $stockItemTableName = Mage::getSingleton('core/resource')->getTableName('cataloginventory/stock_item');
+                $productCollection->getSelect()
+                    ->joinLeft(
+                        array('s' => $stockItemTableName),
+                        's.product_id=e.entity_id'
+                    );
+
+                $productCollection->load();
+
+                if($productCollection->getSize() > 0) {
+                    try {
+                        $jsonData = $api->send($productCollection, $feed);
+                        $data = json_decode($jsonData);
+                        if ($data->returnStatusCode === self::STATUS_CODE_SUCCESS) {
+                            $allFeedsExportedStatus[$feed->getStoreId()] = true;
+                        }
+                    } catch (\Exception $e) {
+                        Mage::log("Adabra_Realtime: Error product api call - " . $e->getMessage());
                     }
-                } catch (\Exception $e) {
-                    Mage::log("Adabra_Realtime: Error product api call - " . $e->getMessage());
                 }
+
             }
 
             if($this->_allFeedExported($allFeedsExportedStatus)) {
@@ -141,9 +157,9 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
             } else {
                 return false;
             }
-
-
         }
+
+        return false;
     }
 
     public function getQueueList($type)
@@ -157,7 +173,7 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
     {
         $fsHelper = Mage::helper('adabra_feed/filesystem');
 
-        if (!$fsHelper->acquireLock('queue')) {
+        if (!$fsHelper->acquireLock('adabra_queue')) {
             return $this;
         }
         //process Categories 150 pagination
@@ -195,7 +211,7 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
             $collection = $this->getQueueList($type);
         } while ($pageNumber < $pages);
 
-        $fsHelper->releaseLock('queue');
+        $fsHelper->releaseLock('adabra_queue');
 
         return $this;
         

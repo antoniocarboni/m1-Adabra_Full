@@ -127,15 +127,16 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
         }
 
         // Find first category
-//        $mainCategoryId = Mage::helper('adabra_feed')->getFirstValidCategory($categoryIds, $this->getFeed()->getStore()->getStoreId());
-        $mainCategoryId = 18;
+        $mainCategoryId = Mage::helper('adabra_feed')->getFirstValidCategory($categoryIds, $this->getFeed()->getStore()->getStoreId());
 
         $productArray = array(
             'idProdotto' => $product->getSku(),
+            'SKU' => $product->getSku(),
             'idCategoriaPrincipale' => $mainCategoryId,
             'linkNegozio' => $productUrl,
             'nome' => $product->getName(),
-            'descrizioneBreve' => $product->getDescription(),
+            'descrizione' => $product->getDescription(),
+            'descrizioneBreve' => $product->getShortDescription() ?: $product->getName(),
             'prezzoSpedizione' => $this->getVirtualField($product, 'prezzo_spedizione'),
             'prezzoBase' => $this->_toCurrency($price, true),
             'prezzoFinale' => $this->_toCurrency($finalPrice, true),
