@@ -116,12 +116,13 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
             ->getAttributeRawValue($product->getId(), $imageType, $this->getFeed()->getStoreId());
 
         if ($productImage && ($productImage != 'no_selection')) {
-            $imageSize = Mage::helper('adabra_feed')->getImageSize();
-            if ($imageSize) {
-                $imageUrl = Mage::helper('catalog/image')->init($product, $imageType)->resize($imageSize);
-            } else {
-                $imageUrl = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($productImage);
-            }
+//            $imageSize = Mage::helper('adabra_feed')->getImageSize();
+//            if ($imageSize) {
+//                $imageUrl = Mage::helper('catalog/image')->init($product, $imageType)->resize($imageSize);
+//            } else {
+//                $imageUrl = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($productImage);
+//            }
+            $imageUrl = Mage::getSingleton('catalog/product_media_config')->getMediaUrl($productImage);
         } else {
             $imageUrl = '';
         }
@@ -133,6 +134,7 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
             'idProdotto' => $product->getSku(),
             'SKU' => $product->getSku(),
             'idCategoriaPrincipale' => $mainCategoryId,
+            'categorieSecondarie' => implode(',', $categoryIds),
             'linkNegozio' => $productUrl,
             'nome' => $product->getName(),
             'descrizione' => $product->getDescription(),
