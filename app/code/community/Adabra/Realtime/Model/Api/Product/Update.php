@@ -18,7 +18,7 @@
 
 class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
 {
-    const ENDPOINT = 'https://staging.marketingspray.com/api/v1/catalog/product/update';
+    const ENDPOINT = '/api/v1/catalog/product/update';
 
     protected $_virtualFields = array();
 
@@ -134,7 +134,7 @@ class Adabra_Realtime_Model_Api_Product_Update extends Adabra_Realtime_Model_Api
             'idProdotto' => $product->getSku(),
             'SKU' => $product->getSku(),
             'idCategoriaPrincipale' => $mainCategoryId,
-            'categorieSecondarie' => implode(',', $categoryIds),
+            'categorieSecondarie' => $categoryIds,
             'linkNegozio' => $productUrl,
             'nome' => $product->getName(),
             'descrizione' => $product->getDescription(),

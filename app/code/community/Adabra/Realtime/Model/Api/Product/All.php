@@ -18,7 +18,7 @@
 
 class Adabra_Realtime_Model_Api_Product_All extends Adabra_Realtime_Model_Api
 {
-    const ENDPOINT = 'https://staging.marketingspray.com/api/v1/catalog/product/add';
+    const ENDPOINT = '/api/v1/catalog/product/add';
 
     protected $_store = null;
 

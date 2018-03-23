@@ -65,7 +65,7 @@ abstract class Adabra_Realtime_Model_Api {
     protected function _getEndpoint()
     {
         if(is_null($this->_endpoint)) {
-            $this->_endpoint = static::ENDPOINT;
+            $this->_endpoint =  $this->getAdabraTrackingHost() . static::ENDPOINT;
         }
 
         return $this->_endpoint;
@@ -85,5 +85,14 @@ abstract class Adabra_Realtime_Model_Api {
     protected function _toBoolean($val)
     {
         return $val ? 'true' : 'false';
+    }
+
+    /**
+     * Get adabra api host
+     * @return string
+     */
+    public function getAdabraTrackingHost()
+    {
+        return Mage::helper('adabra_realtime')->getAdabraApiHost();
     }
 }

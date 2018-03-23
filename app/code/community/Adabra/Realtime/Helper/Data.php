@@ -26,6 +26,10 @@ class Adabra_Realtime_Helper_Data extends Mage_Core_Helper_Abstract
     const XML_API_KEY = 'adabra_realtime/general/api_key';
     const XML_API_SECRET = 'adabra_realtime/general/api_secret';
     const XML_CATALOG_ID = 'adabra_realtime/general/catalog_id';
+    const XML_PATH_GENERAL_TEST_MODE = 'adabra_realtime/general/test_mode';
+
+    const TRACKING_HOST_PROD = 'https://my.adabra.com';
+    const TRACKING_HOST_TEST = 'https://staging.marketingspray.com';
 
     /**
      * Return true if this plugin is enabled
@@ -89,5 +93,23 @@ class Adabra_Realtime_Helper_Data extends Mage_Core_Helper_Abstract
     public function log($message, $level = Zend_Log::INFO, $force = false)
     {
         Mage::log($message, $level, 'adabra_realtime.log', $force);
+    }
+
+    /**
+     * Return true if this plugin is in test mode
+     * @return bool
+     */
+    public function getTestMode()
+    {
+        return (bool) Mage::getStoreConfig(self::XML_PATH_GENERAL_TEST_MODE);
+    }
+
+    /**
+     * Get Adabra API host
+     * @return string
+     */
+    public function getAdabraApiHost()
+    {
+        return $this->getTestMode() ? self::TRACKING_HOST_TEST : self::TRACKING_HOST_PROD;
     }
 }

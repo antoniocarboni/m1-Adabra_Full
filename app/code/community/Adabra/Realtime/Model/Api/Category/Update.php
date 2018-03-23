@@ -18,7 +18,7 @@
 
 class Adabra_Realtime_Model_Api_Category_Update extends Adabra_Realtime_Model_Api
 {
-    const ENDPOINT = 'https://staging.marketingspray.com/api/v1/catalog/category/update';
+    const ENDPOINT = '/api/v1/catalog/category/update';
 
     protected $_feed;
 
