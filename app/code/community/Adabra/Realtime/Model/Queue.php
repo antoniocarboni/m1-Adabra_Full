@@ -114,6 +114,8 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
             /** @var Adabra_Feed_Model_Feed $feed */
             foreach ($feeds as $feed) {
                 $allFeedsExportedStatus[$feed->getStoreId()] = false;
+
+                Mage::app()->setCurrentStore($feed->getStore()->getCode());
                 
                 /** @var Mage_Catalog_Model_Resource_Product_Collection $productCollection */
                 $productCollection = Mage::getModel('catalog/product')->getCollection();
@@ -138,7 +140,7 @@ class Adabra_Realtime_Model_Queue extends Mage_Core_Model_Abstract
 
                 $productCollection->load();
 
-                if($productCollection->getSize() > 0) {
+                if($productCollection->count() > 0) {
                     try {
                         $jsonData = $api->send($productCollection, $feed);
                         $data = json_decode($jsonData);
