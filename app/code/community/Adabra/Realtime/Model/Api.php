@@ -33,7 +33,8 @@ abstract class Adabra_Realtime_Model_Api {
             if (!empty($payload)) {
 
                 if(static::METHOD == 'POST'){
-                    $json = Mage::helper('core')->jsonEncode($payload);
+//                    $json = Mage::helper('core')->jsonEncode($payload);
+                    $json = json_encode($payload,JSON_UNESCAPED_SLASHES);
                     $client->setRawData($json, null);
                 }
             }
