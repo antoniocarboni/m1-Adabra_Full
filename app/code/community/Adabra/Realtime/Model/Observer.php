@@ -43,4 +43,50 @@ class Adabra_Realtime_Model_Observer
             $adabraQueue->save();
         }
     }
+
+    public function catalogCategorySaveCommitAfter($event)
+    {
+        $category = $event->getCategory();
+
+        /**
+         * new category-product relationships
+         */
+        $products = $category->getPostedProducts();
+
+        /**
+         * Example re-save category
+         */
+        if ($products === null) {
+            return $this;
+        }
+
+        /**
+         * old category-product relationships
+         */
+        $oldProducts = $category->getProductsPosition();
+
+        $insert = array_diff_key($products, $oldProducts);
+        $delete = array_diff_key($oldProducts, $products);
+
+        $ids = array();
+
+        foreach ($insert as $key => $val) {
+            $ids[] = $key;
+        }
+
+        foreach ($delete as $key => $val) {
+            $ids[] = $key;
+        }
+
+        $productsCollection = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToFilter('entity_id', array('in' => $ids));
+
+        foreach($productsCollection as $product) {
+            $adabraQueue = Mage::getModel('adabra_realtime/queue');
+            $adabraQueue->setQueueCode($product->getSku());
+            $adabraQueue->setQueueType(Adabra_Realtime_Model_Queue::TYPE_PRODUCT);
+            $adabraQueue->save();
+        }
+    }
 }

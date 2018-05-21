@@ -74,6 +74,14 @@
                     </adabra_realtime>
                 </observers>
             </catalog_category_save_after>
+            <catalog_category_save_commit_after>
+                <observers>
+                    <arreda_categoryposition>
+                        <class>adabra_realtime/observer</class>
+                        <method>catalogCategorySaveCommitAfter</method>
+                    </arreda_categoryposition>
+                </observers>
+            </catalog_category_save_commit_after>
         </events>
     </global>
 
