@@ -78,15 +78,22 @@ class Adabra_Realtime_Model_Observer
             $ids[] = $key;
         }
 
+        $productList = array();
+
         $productsCollection = Mage::getModel('catalog/product')
             ->getCollection()
             ->addAttributeToFilter('entity_id', array('in' => $ids));
 
         foreach($productsCollection as $product) {
-            $adabraQueue = Mage::getModel('adabra_realtime/queue');
-            $adabraQueue->setQueueCode($product->getSku());
-            $adabraQueue->setQueueType(Adabra_Realtime_Model_Queue::TYPE_PRODUCT);
-            $adabraQueue->save();
+            $productList[] = array(
+                'queue_code' => $product->getSku(),
+                'queue_type' => 'product'
+            );
+        }
+
+        if(count($productList)) {
+            $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+            $connection->insertMultiple('adabra_realtime_queue', $productList);
         }
     }
 }
