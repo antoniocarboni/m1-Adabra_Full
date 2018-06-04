@@ -268,6 +268,25 @@
                         </order>
                     </fields>
                 </batch_size>
+                <custom_tags translate="label">
+                    <label>Tags</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>60</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_stor>0</show_in_stor>
+                    <fields>
+                        <custom_tags_list translate="label">
+                            <tags>Custom Tags list</tags>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>List of attribute</comment>
+                        </custom_tags_list>
+                    </fields>
+                </custom_tags>
             </groups>
         </adabra_feed>
     </sections>
