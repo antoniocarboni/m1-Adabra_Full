@@ -99,6 +99,20 @@ class Adabra_Feed_Model_Feed_Order extends Adabra_Feed_Model_Feed_Abstract
         foreach ($orderItems as $orderItem) {
             $isFirstRow = ($rowsCount == 0);
 
+            // Discount
+            $discount = abs($orderItem->getDiscountAmount());
+            $taxAmount= $orderItem->getTaxAmount();
+            $hiddenTaxAmount = $orderItem->getHiddenTaxAmount();
+
+            if($orderItem->getQtyOrdered()>0) {
+                $discount = $discount / $orderItem->getQtyOrdered();
+                $taxAmount = $orderItem->getTaxAmount() / $orderItem->getQtyOrdered();
+                $hiddenTaxAmount = $orderItem->getHiddenTaxAmount() / $orderItem->getQtyOrdered();
+            }
+
+            $price = $this->_toCurrency($orderItem->getPrice() - $discount, true);
+            $priceInclTax = $this->_toCurrency($price + $taxAmount + $hiddenTaxAmount, true);
+
             $cpId = 0;
             $buyRequest = $orderItem->getProductOptionByCode('info_buyRequest');
             if (isset($buyRequest['cpid'])) {
@@ -133,9 +147,9 @@ class Adabra_Feed_Model_Feed_Order extends Adabra_Feed_Model_Feed_Abstract
                 $productSku,
                 $orderItem->getQtyOrdered(),
                 $order->getOrderCurrencyCode(),
-                $this->_toCurrency($orderItem->getPrice(), true),
+                $price,
                 ($isFirstRow ? $this->_toCurrency($shippingAmount, true) : ''),
-                $this->_toCurrency($orderItem->getPriceInclTax(), true),
+                $priceInclTax,
                 ($isFirstRow ? $couponCode : ''),
                 $this->_toTimestamp($createdAt),
             );

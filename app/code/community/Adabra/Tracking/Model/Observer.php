@@ -103,13 +103,32 @@ class Adabra_Tracking_Model_Observer
 
         $orderItems = $order->getAllVisibleItems();
 
+
+
         foreach ($orderItems as $orderItem) {
+
             $isFirstRow = ($rowsCount == 0);
+
+            // Discount
+            $discount = abs($orderItem->getDiscountAmount());
+            $taxAmount= $orderItem->getTaxAmount();
+            $hiddenTaxAmount = $orderItem->getHiddenTaxAmount();
+
+            if($orderItem->getQtyOrdered()>0) {
+                $discount = $discount / $orderItem->getQtyOrdered();
+                $taxAmount = $orderItem->getTaxAmount() / $orderItem->getQtyOrdered();
+                $hiddenTaxAmount = $orderItem->getHiddenTaxAmount() / $orderItem->getQtyOrdered();
+            }
+
+            $price = $this->_toCurrency($orderItem->getPrice() - $discount, true);
+            $priceInclTax = $this->_toCurrency($price + $taxAmount + $hiddenTaxAmount, true);
+
 
             $productSku = $orderItem->getProduct()->getData('sku');
             if (Mage::helper('adabra_tracking')->isBlacklistedSku($productSku)) {
                 continue;
             }
+
 
             $couponCode = $order->getCouponCode();
             if (is_null($couponCode)) {
@@ -122,8 +141,8 @@ class Adabra_Tracking_Model_Observer
                 $productSku,
                 $orderItem->getQtyOrdered(),
                 $isFirstRow ? $couponCode : '',
-                $orderItem->getPrice(),
-                $orderItem->getPriceInclTax(),
+                $price,
+                $priceInclTax,
                 $isFirstRow ? $this->_toCurrency($order->getShippingAmount()) : '',
                 $order->getOrderCurrencyCode(),
                 $this->_toTimestamp($createdAt),

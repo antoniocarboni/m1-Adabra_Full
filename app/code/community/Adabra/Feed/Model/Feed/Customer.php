@@ -66,7 +66,7 @@ class Adabra_Feed_Model_Feed_Customer extends Adabra_Feed_Model_Feed_Abstract
         $resource = Mage::getSingleton('core/resource');
         $readConnection = $resource->getConnection('core_read');
 
-        $tableName = $readConnection->getTableName('newsletter_subscriber');
+        $tableName = $resource->getTableName('newsletter_subscriber');
         $qry = $readConnection->select()->from($tableName, 'subscriber_id')
             ->where('customer_id = ' . $readConnection->quote($customer->getId()))
             ->where('subscriber_status = 1')
