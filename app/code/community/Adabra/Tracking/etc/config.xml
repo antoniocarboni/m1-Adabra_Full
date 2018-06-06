@@ -22,7 +22,7 @@
 <config>
     <modules>
         <Adabra_Tracking>
-            <version>0.2.13</version>
+            <version>0.2.14</version>
         </Adabra_Tracking>
     </modules>
     <global>
