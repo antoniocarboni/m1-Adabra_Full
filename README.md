@@ -1,3 +1,9 @@
+## DEPRECATED
+
+### This project is deprecated and no longer being maintained, please visit official repo site [Adabra](https://inside.adabra.com/source/projects/AP/repos/adabra---magento/browse).
+
+----------
+
 # Official AdSpray Adabra Plugin for Magento 1
 
 This is an integration module between [AdSpray Adabra](http://www.adabra.com/) technology and Magento 1.
