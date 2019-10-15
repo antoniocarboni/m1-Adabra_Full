@@ -1,0 +1,20 @@
+app/code/community/Adabra/Common/    app/code/community/Adabra/Common/
+app/code/community/Adabra/Feed/    app/code/community/Adabra/Feed/
+app/code/community/Adabra/Tracking/    app/code/community/Adabra/Tracking/
+
+app/design/adminhtml/default/default/layout/adabra_common.xml    app/design/adminhtml/default/default/layout/adabra_common.xml
+app/design/frontend/base/default/layout/adabra_tracking.xml     app/design/frontend/base/default/layout/adabra_tracking.xml
+app/design/frontend/base/default/template/adabra/tracking/action.phtml    app/design/frontend/base/default/template/adabra/tracking/action.phtml
+app/design/frontend/base/default/template/adabra/tracking/init.phtml    app/design/frontend/base/default/template/adabra/tracking/init.phtml
+app/design/frontend/base/default/template/adabra/tracking/script.phtml    app/design/frontend/base/default/template/adabra/tracking/script.phtml
+
+app/etc/modules/Adabra_Common.xml      app/etc/modules/Adabra_Common.xml
+app/etc/modules/Adabra_Feed.xml        app/etc/modules/Adabra_Feed.xml
+app/etc/modules/Adabra_Tracking.xml      app/etc/modules/Adabra_Tracking.xml
+
+
+shell/adabra/rebuild.php  shell/adabra/rebuild.php
+shell/adabra/run.php    shell/adabra/run.php
+
+skin/adminhtml/default/default/adabra/adabra.css      skin/adminhtml/default/default/adabra/adabra.css
+skin/adminhtml/default/default/adabra/logo_small.png      skin/adminhtml/default/default/adabra/logo_small.png
