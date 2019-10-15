@@ -1,0 +1,14 @@
+{
+    "name":        "adabra/tracking",
+    "description": "Adabra Tracking",
+    "type":        "magento-module",
+    "license":     "MIT",
+    "authors": [
+        {
+            "name":  "Adabra"
+        }
+    ],
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
